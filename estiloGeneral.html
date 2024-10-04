@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CECyCLUB'S-
+        {% block title %}{% endblock %}
+    </title>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <link rel="stylesheet" href="{% static 'images/logo.png' %}">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+    </style>
+    {% block headExtra %}{% endblock %}
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <span class="logo">
+            <h1>CECyCLUB'S</h1>
+        </span>
+        <nav class="menu">
+            <ul>
+                <li><a target="_blank" href="#inicio">Inicio</a></li>
+                <li><a target="_blank" href="#servicios">Clubes</a></li>
+                <li><a target="_blank" href="#equipo">Eventos</a></li>
+                <li><a target="_blank" href="#contacto">Configuración</a></li>
+            </ul>
+        </nav>
+        <button class="menu-btn" onclick="menuDesplegable()">☰</button>
+        {% block headerExtra %}{% endblock %}
+    </header>
+
+    <section class="menu-desplegable" id="menuDesplegable">
+        <button class="close-btn" onclick="menuDesplegable()">✖</button> <!-- Botón para cerrar el menú -->
+        <ul>
+            <li><a target="_blank" href="#inicio">Inicio</a></li>
+            <li><a target="_blank" href="#servicios">Clubes</a></li>
+            <li><a target="_blank" href="#equipo">Eventos</a></li>
+            <li><a target="_blank" href="#contacto">Configuración</a></li>
+        </ul>
+    </section>
+
+    <!-- Contenido principal -->
+    {% block contenidoPrincipal %}
+    {% endblock %}
+
+    <!-- Footer -->
+    <footer>
+        <section class="footer-informacion">
+            <h3>Contacta con nosotros</h3>
+            <p><strong>Email:</strong> email@email.com</p>
+            <p><strong>Teléfono:</strong> +52 123 456 7890</p>
+            <p><strong>Dirección:</strong> Calle, Colonia, Ciudad, País</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero adipisci fugit, sapiente quibusdam temporibus ipsa illo maxime eaque eveniet vitae necessitatibus harum provident aut? In quaerat nesciunt illo fuga harum!</p>
+        </section>
+        <section class="footer-redes">
+            <h3>Síguenos en redes sociales</h3>
+            <ul>
+                <li><a href="#"><ion-icon name="logo-facebook"></ion-icon></a></li>
+                <li><a href="#"><ion-icon name="logo-whatsapp"></ion-icon></a></li>
+                <li><a href="#"><ion-icon name="logo-instagram"></ion-icon></a></li>
+            </ul>
+        </section>
+    </footer>
+
+    <script>
+        function menuDesplegable() {
+            const menu = document.getElementById('menuDesplegable');
+            menu.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
