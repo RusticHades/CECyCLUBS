@@ -1,0 +1,264 @@
+<!-- inicio/templates/inicio/inicio.html -->
+{% extends 'estiloGeneral.html' %}  <!-- Usa la ruta directa al template base -->
+
+{% block contenidoPrincipal %}
+<style>
+:root {
+    --color-principal: #ff5733;
+    --color-secundario: #ffc300;
+    --color-parrafo: #ffffff;
+    --color-fondo: #f8f8f8;
+    --color-parrafoNormal: #333;
+}
+
+.bienvenida {
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #ff5733, #ffc300);
+    border-bottom-left-radius: 15px;
+    border-radius: 0 0 30px 30px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.bienvenida-contenido {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.texto-bienvenida {
+    flex: 1 1 50%;
+    padding: 20px;
+    text-align: left;
+}
+
+.texto-bienvenida h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-parrafo);
+}
+
+.texto-bienvenida p {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    color: var(--color-parrafo);
+    margin-bottom: 30px;
+}
+
+.btn-explorar {
+    padding: 15px 30px;
+    background-color: var(--color-fondo);
+    color: var(--color-principal);
+    font-size: 1.2em;
+    border: 1px solid var(--color-principal);
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.btn-explorar:hover {
+    background-color: var(--color-principal);
+    color: var(--color-parrafo);
+}
+
+.imagen-bienvenida {
+    flex: 1 1 40%;
+    padding: 20px;
+}
+
+.imagen-bienvenida img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.indicador-bajar {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 3rem;
+    color: var(--color-parrafo);
+    animation: bajar 1s infinite;
+    cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+}
+
+@keyframes bajar {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-15px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+</style>
+
+<style>
+.pasos {
+    padding: 50px 20px;
+    background-color: var(--color-fondo);
+    border-radius: 10px;
+}
+
+.pasos h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2.2em;
+    color: var(--color-principal);
+}
+
+.pasos-contenido {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.tarjeta {
+    background-color: var(--color-secundario);
+    border-radius: 10px;
+    padding: 30px;
+    flex: 1 1 calc(25% - 40px);
+    max-width: 250px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.tarjeta:hover {
+    transform: translateY(-15px);
+}
+
+.tarjeta h3 {
+    font-size: 1.5rem;
+    color: var(--color-principal);
+    margin-bottom: 15px;
+}
+
+.numero-paso {
+    font-size: 3rem;
+    color: var(--color-principal);
+    margin-right: 10px;
+}
+
+.tarjeta p {
+    color: var(--color-parrafoNormal);
+}
+</style>
+
+<style>
+.valores-banner {
+    background-color: var(--color-principal);
+    padding: 50px 20px;
+    text-align: center;
+    margin-top: 50px;
+    border-radius: 10px;
+}
+
+.valores-banner h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2.2em;
+    color: var(--color-parrafo);
+}
+
+.valores-contenido {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.valor {
+    flex: 1;
+    max-width: 300px;
+    padding: 20px;
+    margin: 10px;
+    background-color: var(--color-fondo);
+    border-radius: 10px;
+}
+
+.valor h3 {
+    font-size: 1.8em;
+    color: var(--color-principal);
+    margin-bottom: 15px;
+}
+
+.valor p {
+    color: var(--color-parrafoNormal);
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+</style>
+
+<main>
+    <section class="bienvenida">
+        <div class="bienvenida-contenido">
+            <article class="texto-bienvenida">
+                <h1>¡Bienvenid@ a CECyCLUB'S!</h1>
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolores eum in aut deleniti earum, facere quibusdam dolorum repudiandae ut! Distinctio nisi harum architecto, praesentium cum facilis similique quasi dignissimos tenetur!</p>
+                <a href="#clubes" class="btn-explorar">Explora nuestros clubes</a>
+            </article>
+            <article class="imagen-bienvenida">
+                <img src="https://cecytem.edomex.gob.mx/sites/cecytem.edomex.gob.mx/files/images/CUAUTITLAN%20IZCALLI.jpg" alt="Bienvenida a Cecyclubs">
+            </article>
+        </div>
+        <div class="indicador-bajar">
+            <span>↓</span>
+        </div>
+    </section>
+
+    <section class="pasos">
+        <h2>Pasos para unirse a CECyCLUB'S</h2>
+        <div class="pasos-contenido">
+            <article class="tarjeta">
+                <h3><span class="numero-paso">1</span> Regístrate</h3>
+                <p>Crea tu cuenta para acceder a los clubes.</p>
+            </article>
+            <article class="tarjeta">
+                <h3><span class="numero-paso">2</span> Explora Clubes</h3>
+                <p>Descubre clubes que se alineen con tus intereses.</p>
+            </article>
+            <article class="tarjeta">
+                <h3><span class="numero-paso">3</span> Únete a uno</h3>
+                <p>Solicita unirte.</p>
+            </article>
+            <article class="tarjeta">
+                <h3><span class="numero-paso">4</span> Participa en Eventos</h3>
+                <p>Asiste a eventos.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="valores-banner">
+        <h2>Valores que impartimos</h2>
+        <div class="valores-contenido">
+            <div class="valor">
+                <h3>Colaboración</h3>
+                <p>Fomentamos el trabajo en equipo y las conexiones significativas.</p>
+            </div>
+            <div class="valor">
+                <h3>Innovación</h3>
+                <p>Impulsamos nuevas ideas y proyectos que cambian nuestra comunidad.</p>
+            </div>
+            <div class="valor">
+                <h3>Inclusión</h3>
+                <p>Todos son bienvenidos en Cecyclubs, sin importar su origen o habilidades.</p>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
