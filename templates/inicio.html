@@ -1,4 +1,13 @@
 {% extends 'estiloGeneral.html' %}  <!-- Usando la ruta al template del estilo general -->
+{% load static %}
+
+{% block title %}
+Inicio
+{% endblock %}
+
+{% block estilosExtra %}
+<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+{% endblock %}
 
 {% block contenidoPrincipal %}
 
@@ -20,7 +29,7 @@
     </section>
 
     <section class="pasos">
-        <h2>Pasos para unirse a CECyCLUB'S</h2>
+        <h2>Pasos para Iniciar</h2>
         <div class="pasos-contenido">
             <article class="tarjeta">
                 <h3><span class="numero-paso">1</span> Regístrate</h3>
@@ -58,5 +67,95 @@
             </div>
         </div>
     </section>
+
+    <section class="equipo">
+        <h2>Conoce a Nuestro Equipo</h2>
+        <div class="equipo-contenido">
+            <div class="equipo-carrusel">
+                <div class="carrusel-interno">
+                    <article class="miembro">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnzNLPlZtpgGE_A_Jkp3wHV7UAg_cLRd8EvQ&s" alt="Foto de Miembro 1">
+                        <div class="miembro-texto">
+                            <h3>Christian Aaron Garduño Mendoza</h3>
+                            <p>Miembro del Equipo</p>
+                            <p>Estudiante de Programacion</p>
+                            <a href="">Contacto</a>
+                        </div>
+                    </article>
+                    <article class="miembro">
+                        <img src="https://static.wikia.nocookie.net/6e936e5b-25a4-482c-b7be-e639beeb2c15/scale-to-width/755" alt="Foto de Miembro 2">
+                        <div class="miembro-texto">
+                            <h3>Eduardo Orozco Chavez</h3>
+                            <p>Miembro del Equipo</p>
+                            <p>Estudiante de Programacion</p>
+                            <a href="">Contacto</a>
+                        </div>
+                    </article>
+                    <article class="miembro">
+                        <img src="https://i.pinimg.com/236x/4b/af/d8/4bafd8292d911c9d01a6cb576cbc64ed.jpg" alt="Foto de Miembro 3">
+                        <div class="miembro-texto">
+                            <h3>Zair Vazquez Ibarra</h3>
+                            <p>Miembro del Equipo</p>
+                            <p>Estudiante de Programacion</p>
+                            <a href="">Contacto</a>
+                        </div>
+                    </article>
+                    <article class="miembro">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSynFvWjSaioIOdJ4ijaPj5e1Yru_MiG3J05g&s" alt="Foto de Miembro 4">
+                        <div class="miembro-texto">
+                            <h3>Luis Fernando Castañeda Diaz</h3>
+                            <p>Miembro del Equipo</p>
+                            <p>Estudiante de Programacion</p>
+                            <a href="">Contacto</a>
+                        </div>
+                    </article>
+                    <article class="miembro">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmSaaddBQKHgvmxPcxZ5f7c6fAFpE7cf9yfw&s" alt="Foto de Miembro 5">
+                        <div class="miembro-texto">
+                            <h3>Yatzeli Perez Vigueras</h3>
+                            <p>Miembro del Equipo</p>
+                            <p>Estudiante de Programacion</p>
+                            <a href="">Contacto</a>
+                        </div>
+                    </article>
+                    <article class="miembro">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTptvveAWmc0fte8QDdtTi23PhCHKWcTlzB6g&s" alt="Foto de Miembro 6">
+                        <div class="miembro-texto">
+                            <h3>Jhonatan Isaac  Delgado Isidoro</h3>
+                            <p>Miembro del Equipo</p>
+                            <p>Estudiante de Programacion</p>
+                            <a href="">Contacto</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="controles">
+                <a id="anterior">Anterior</a>
+                <a id="siguiente">Siguiente</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const carrusel = document.querySelector('.carrusel-interno');
+        const miembros = document.querySelectorAll('.miembro');
+        const totalMiembros = miembros.length;
+        let indiceActual = 0;
+
+        function deslizarA(indice) {
+            const anchoMiembro = miembros[indice].offsetWidth; // Obtiene el ancho del miembro actual
+            carrusel.style.transform = `translateX(-${indice * anchoMiembro}px)`;
+        }
+
+        document.querySelector('#siguiente').addEventListener('click', function() {
+            indiceActual = (indiceActual + 1) % totalMiembros;
+            deslizarA(indiceActual);
+        });
+
+        document.querySelector('#anterior').addEventListener('click', function() {
+            indiceActual = (indiceActual - 1 + totalMiembros) % totalMiembros;
+            deslizarA(indiceActual);
+        });
+    </script>
 </main>
 {% endblock %}
