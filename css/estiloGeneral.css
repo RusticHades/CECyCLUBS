@@ -179,7 +179,7 @@ footer h3 {
 }
 
 /* Estilos responsivos */
-@media (max-width: 768px) {
+@media (max-width: 770px) {
     nav ul {
         display: none;
     }
