@@ -1,0 +1,108 @@
+.animar{
+    opacity: 0;
+}
+
+/* Animaciones de entrada */
+@keyframes deslizar-arriba {
+    0% {
+        transform: translateY(30%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes deslizar-abajo {
+    0% {
+        transform: translateY(-30%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes deslizar-derecha {
+    0% {
+        transform: translateX(20%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes deslizar-izquierda {
+    0% {
+        transform: translateX(-20%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes girar-entrada {
+    0% {
+        transform: rotate(-180deg);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes escalar-entrada {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes desvanecer-entrada {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Clases para aplicar las animaciones */
+.deslizar-arriba {
+    animation: deslizar-arriba 1s forwards;
+}
+
+.deslizar-abajo {
+    animation: deslizar-abajo 1s forwards;
+}
+
+.deslizar-derecha {
+    animation: deslizar-derecha 1s forwards;
+}
+
+.deslizar-izquierda {
+    animation: deslizar-izquierda 1s forwards;
+}
+
+.girar-entrada {
+    animation: girar-entrada 1s forwards;
+}
+
+.escalar-entrada {
+    animation: escalar-entrada 1s forwards;
+}
+
+.desvanecer-entrada {
+    animation: desvanecer-entrada 1.3s forwards;
+}
