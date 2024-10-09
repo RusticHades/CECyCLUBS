@@ -76,6 +76,11 @@
     height: auto;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.imagen-bienvenida img:hover{
+    transform: scale(1.05);
 }
 
 .indicador-bajar {
@@ -151,6 +156,103 @@
     }
 
 }
+
+/* porque participar */
+
+.porque-participar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem;
+    background: var(--color-fondo);
+    gap: 3rem;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.porque-participar-texto {
+    flex: 1;
+    max-width: 50%;
+    color: var(--color-parrafoNormal);
+}
+
+.porque-participar-texto h2 {
+    font-size: 2.2em;
+    color: var(--color-principal);
+    margin-bottom: 1em;
+    letter-spacing: 1.5px;
+    position: relative;
+    z-index: 1;
+}
+
+.porque-participar-texto p {
+    margin-bottom: 1.5em;
+    color: var(--color-parrafoNormal);
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+.porque-participar-texto ul {
+    list-style: none;
+    padding: 0;
+}
+
+.porque-participar-texto ul li {
+    font-size: 1.1em;
+    margin: 8px 0;
+    color: var(--color-parrafoNormal);
+    display: flex;
+    align-items: center;
+}
+
+.porque-participar-texto ul li::before {
+    content: '✔';
+    color: var(--color-principal);
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.porque-participar-texto ul li strong {
+    color: var(--color-principal);
+}
+
+.porque-participar-imagen {
+    flex: 1;
+    max-width: 45%;
+}
+
+.porque-participar-imagen img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.porque-participar-imagen img:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 800px) {
+    .porque-participar {
+        flex-direction: column;
+        align-items: center;
+        padding: 2em;
+    }
+
+    .porque-participar-texto {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .porque-participar-imagen {
+        max-width: 100%;
+        margin-top: 1em;
+    }
+}
+
+
 /* Pasos para pertenecer */
 
 .pasos {
