@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CECyCLUB'S-
+    <title>CECyCLUB'S -
         {% block title %}{% endblock %}
     </title>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -22,16 +22,16 @@
 </head>
 <body>
     <!-- Encabezado -->
-    <header>
+    <header class="">
         <span class="logo">
             <h1>CECyCLUB'S</h1>
         </span>
         <nav class="menu">
             <ul>
-                <li><a target="_blank" href="#inicio">Inicio</a></li>
-                <li><a target="_blank" href="#servicios">Clubes</a></li>
-                <li><a target="_blank" href="#equipo">Eventos</a></li>
-                <li><a target="_blank" href="#contacto">Configuración</a></li>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Clubes</a></li>
+                <li><a href="#eventos">Eventos</a></li>
+                <li><a href="#configuracion">Configuración</a></li>
             </ul>
         </nav>
         <button class="menu-btn" onclick="menuDesplegable()">☰</button>
@@ -53,7 +53,7 @@
     {% endblock %}
 
     <!-- Footer -->
-    <footer>
+    <footer class="deslizar-arriba">
         <section class="footer-informacion">
             <h3>Contacta con nosotros</h3>
             <p><strong>Email:</strong> email@email.com</p>
@@ -71,11 +71,6 @@
         </section>
     </footer>
 
-    <script>
-        function menuDesplegable() {
-            const menu = document.getElementById('menuDesplegable');
-            menu.classList.toggle('open');
-        }
-    </script>
+    <script src="{% static 'javascript/menuDesplegable.js' %}"></script>
 </body>
 </html>
