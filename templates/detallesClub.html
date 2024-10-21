@@ -1,176 +1,58 @@
 {% extends 'estiloGeneral.html' %}
+{% load static %}
 
 {% block title %}Detalles del Club: {{ nombre }}{% endblock %}
 
+{% block estilosExtra %}
+<link rel="stylesheet" href="{% static 'css/detallesClub.css' %}">
+{% endblock %}
+
 {% block contenidoPrincipal %}
 
-<style>
-    /* Estilos para la página de detalles del club */
-    .detalle-club {
-        padding: 40px;
-        background-color: var(--color-fondo);
-        text-align: center;
-    }
-
-    .detalle-club h1 {
-        font-size: 36px;
-        color: var(--color-principal);
-        margin-bottom: 20px;
-    }
-
-    .detalle-club img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-
-    .detalle-club p {
-        font-size: 18px;
-        color: var(--color-parrafoNormal);
-        margin-bottom: 20px;
-    }
-
-    /* Submenú */
-    .submenu {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-        gap: 20px;
-        border-bottom: 2px solid var(--color-secundario);
-        background-color: var(--color-secundario);
-        padding: 10px;
-        border-radius: 5px;
-    }
-
-    .submenu button {
-        background: none;
-        border: none;
-        color: var(--color-principal);
-        font-size: 18px;
-        cursor: pointer;
-        padding: 10px;
-        transition: color 0.3s;
-    }
-
-    .submenu button:hover {
-        color: var(--color-principal);
-    }
-
-    /* Contenido de secciones */
-    .contenido-seccion {
-        display: none;
-        margin-top: 20px;
-        border: 1px solid var(--color-secundario);
-        padding: 10px;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-
-    /* Estilos para publicaciones y miembros */
-    .publicacion, .miembro {
-        border: 1px solid var(--color-secundario);
-        border-radius: 5px;
-        margin: 10px;
-        padding: 10px;
-        background-color: #fff;
-    }
-
-    .miembro img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 10px;
-    }
-
-    .lista-miembros {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    /* Estilos para el chat */
-    .chat {
-        margin-top: 20px;
-        border: 1px solid var(--color-secundario);
-        border-radius: 5px;
-        background-color: #fff;
-        padding: 10px;
-        text-align: left;
-    }
-
-    .chat-mensajes {
-        max-height: 200px;
-        overflow-y: auto;
-        margin-bottom: 10px;
-    }
-
-    .chat-mensaje {
-        margin: 5px 0;
-    }
-
-    .chat-input {
-        display: flex;
-        gap: 10px;
-    }
-
-    .chat-input input {
-        flex-grow: 1;
-        padding: 5px;
-    }
-
-    .chat-input button {
-        padding: 5px;
-        background-color: var(--color-principal);
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .chat-input button:hover {
-        background-color: var(--color-secundario);
-    }
-</style>
-
-<section class="detalle-club">
+<main class="detalle-club">
     <h1>{{ nombre }}</h1>
-    <img src="{{ imagenes.0 }}" alt="{{ nombre }}">
-    <p>{{ descripcion }}</p>
+    <div class="club-contenido">
+        <img src="{{ imagenes.0 }}" alt="{{ nombre }}" class="club-imagen">
+        <p>{{ descripcion }}</p>
+    </div>
 
     <div class="submenu">
-        <button onclick="mostrarSeccion('noticias')">Noticias</button>
-        <button onclick="mostrarSeccion('miembros')">Miembros</button>
-        <button onclick="mostrarSeccion('chat')">Chat Grupal</button>
-        <button>Regresar</button>
+        <button onclick="mostrarSeccion('noticias')" class="submenu-button active" id="noticias-tab">Noticias</button>
+        <button onclick="mostrarSeccion('miembros')" class="submenu-button" id="miembros-tab">Miembros</button>
+        <button onclick="mostrarSeccion('chat')" class="submenu-button" id="chat-tab">Chat Grupal</button>
+        <a href="{% url 'clubes' %}" class="submenu-button">Regresar</a>
     </div>
 
-    <div id="noticias" class="contenido-seccion">
+    <div id="noticias" class="contenido-seccion active">
         <h2>Publicaciones del Club</h2>
-        {% for publicacion in publicaciones %}
-            <div class="publicacion">
-                <h3>{{ publicacion.titulo }}</h3>
-                <p>{{ publicacion.contenido }}</p>
-                {% for img in publicacion.imagenes %}
-                    <img src="{{ img }}" alt="Imagen de publicación">
-                {% endfor %}
-            </div>
-        {% endfor %}
+        <div class="lista-publicaciones">
+            {% for publicacion in publicaciones %}
+                <div class="publicacion">
+                    <h3>{{ publicacion.titulo }}</h3>
+                    <p>{{ publicacion.contenido }}</p>
+                    <div class="imagenes-publicacion">
+                        {% for img in publicacion.imagenes %}
+                            <img src="{{ img }}" alt="Imagen de publicación" class="publicacion-img">
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
-    <div id="miembros" class="contenido-seccion">
+    <div id="miembros" class="contenido-seccion" style="display: none;">
         <h2>Miembros del Club</h2>
         <div class="lista-miembros">
             {% for miembro in miembros %}
                 <div class="miembro">
-                    <img src="{{ miembro.imagen }}" alt="{{ miembro.nombre }}">
+                    <img src="{{ miembro.imagen }}" alt="{{ miembro.nombre }}" class="miembro-img">
                     <span>{{ miembro.nombre }}</span>
                 </div>
             {% endfor %}
         </div>
     </div>
 
-    <div id="chat" class="contenido-seccion">
+    <div id="chat" class="contenido-seccion" style="display: none;">
         <h2>Chat Grupal</h2>
         <div class="chat">
             <div class="chat-mensajes" id="chat-mensajes">
@@ -182,20 +64,27 @@
             </div>
         </div>
     </div>
-
-    <a href="{% url 'clubes' %}" class="boton-volver">Volver a los Clubes</a>
-</section>
+</main>
 
 <script>
     function mostrarSeccion(seccion) {
-        // Oculta todas las secciones
         const secciones = document.querySelectorAll('.contenido-seccion');
         secciones.forEach(function (element) {
             element.style.display = 'none';
         });
 
         document.getElementById(seccion).style.display = 'block';
+
+        const tabs = document.querySelectorAll('.submenu-button');
+        tabs.forEach(function(tab) {
+            tab.classList.remove('active');
+        });
+        document.getElementById(seccion + '-tab').classList.add('active');
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        mostrarSeccion('noticias');
+    });
 
     function enviarMensaje() {
         const mensajeInput = document.getElementById('mensaje');
@@ -206,10 +95,9 @@
             nuevoMensaje.classList.add('chat-mensaje');
             nuevoMensaje.textContent = mensajeTexto;
             mensajesDiv.appendChild(nuevoMensaje);
-            mensajeInput.value = ''; // Limpiar el input después de enviar
-            mensajesDiv.scrollTop = mensajesDiv.scrollHeight; // Desplazarse hacia abajo
+            mensajeInput.value = ''; 
+            mensajesDiv.scrollTop = mensajesDiv.scrollHeight; 
         }
     }
 </script>
-
 {% endblock %}

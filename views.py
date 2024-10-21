@@ -29,7 +29,7 @@ def detalle_club(request, nombre):
             'videos': [
                 'https://media.istockphoto.com/id/1213127417/es/v%C3%ADdeo/joven-abrazando-gatito.mp4?s=mp4-640x640-is&k=20&c=ykt-tUF2Bgn7FoPlcTHPew8Kmjrn-Eb1iY-kYGsF0hY=',
             ],
-            'descripcion': 'Este club se dedica a la formación y práctica del fútbol.'
+            'descripcion': ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam tenetur aut ipsum? Quibusdam eligendi nihil laborum sed sapiente? Laudantium hic soluta iure aspernatur asperiores unde dolore ab quos, maiores nam?Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam tenetur aut ipsum? Quibusdam eligendi nihil laborum sed sapiente? Laudantium hic soluta iure aspernatur asperiores unde dolore ab quos, maiores nam?'
         },
         # añadir más clubes
     }
