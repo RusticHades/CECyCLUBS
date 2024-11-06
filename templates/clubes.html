@@ -17,6 +17,11 @@
         <button type="submit">Buscar</button>
     </div>
 
+    <!-- Botón para solicitar nuevos clubes -->
+    <div class="solicitar-club">
+        <a href="{% url 'solicitar_club' %}" class="btn-solicitar">Solicitar nuevo club</a>
+    </div>
+
     <!-- Clasificador por categorías -->
     {% for categoria, clubes_categoria in clubes.items %}
         <h2>{{ categoria }}</h2>
