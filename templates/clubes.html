@@ -22,13 +22,17 @@
         <a href="{% url 'solicitar_club' %}" class="btn-solicitar">Solicitar nuevo club</a>
     </div>
 
+    <div class="solicitudes">
+        <a href="{% url 'solicitudes' %}" class="btn-solicitar">Solicitudes</a>
+    </div>
+
     <!-- Clasificador por categorías -->
     {% for categoria, clubes_categoria in clubes.items %}
         <h2>{{ categoria }}</h2>
         <div class="clubes-categoria">
             {% for club in clubes_categoria %}
                 <a href="{% url 'detalle_club' club.nombre %}" class="club">
-                    <img src="{{ club.imagen }}" alt="{{ club.nombre }}">
+                    <img src="/{{ club.imagen }}" alt="{{ club.nombre }}">
                     <h3>{{ club.nombre }}</h3>
                     <p class="integrantes">Integrantes: {{ club.integrantes }}</p>
                     <button class="ver-mas">Ver más</button>

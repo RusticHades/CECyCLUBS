@@ -1,0 +1,89 @@
+{% extends 'estiloGeneral.html' %}
+
+{% block title %}Solicitar Club{% endblock %}
+
+{% block contenidoPrincipal %}
+    <style>
+    :root {
+        --color-principal: #ff5733;
+        --color-secundario: #ffc300;
+        --color-parrafo: #ffffff;
+        --color-fondo: #f8f8f8;
+        --color-parrafoNormal: #333;
+    }
+
+    main {
+        padding-top: 100px;
+        min-height: 70vh;
+    }
+
+    h1 {
+        color: var(--color-principal);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .solicitudes-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .solicitud-card {
+        background-color: var(--color-parrafo);
+        border: 2px solid var(--color-principal);
+        border-radius: 8px;
+        width: 300px;
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .solicitud-card:hover {
+        transform: scale(1.05);
+    }
+
+    .solicitud-titulo {
+        font-size: 1.2em;
+        color: var(--color-principal);
+        margin: 0;
+        margin-bottom: 10px;
+    }
+
+    .solicitud-categoria {
+        font-size: 0.9em;
+        color: var(--color-secundario);
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .solicitud-descripcion, .solicitud-actividades {
+        color: var(--color-parrafoNormal);
+        margin-bottom: 10px;
+    }
+
+    .solicitud-acciones a {
+        color: #333;
+    }
+</style>
+    <main>
+        <h1>Solicitudes de Clubes</h1>
+        <div class="solicitudes-container">
+            {% for solicitud in solicitudes %}
+                <div class="solicitud-card">
+                    <h2 class="solicitud-titulo">{{ solicitud.nombre }}</h2>
+                    <p class="solicitud-categoria">{{ solicitud.categoria }}</p>
+                    <p class="solicitud-descripcion"><strong>Descripción:</strong> {{ solicitud.descripcion }}</p>
+                    <p class="solicitud-actividades"><strong>Actividades:</strong> {{ solicitud.actividades }}</p>
+                    <div class="solicitud-acciones">
+                        <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn-rechazar">Rechazar</a>
+                        <a href="{% url 'implementar_solicitud' solicitud.id %}" class="btn-implementar">Implementar</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay solicitudes de clubes disponibles.</p>
+            {% endfor %}
+        </div>    
+    </main>
+{% endblock %}

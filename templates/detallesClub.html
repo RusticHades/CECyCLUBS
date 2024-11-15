@@ -10,10 +10,10 @@
 {% block contenidoPrincipal %}
 
 <main class="detalle-club">
-    <h1>{{ nombre }}</h1>
+    <h1>{{ club.nombre }}</h1>
     <div class="club-contenido">
-        <img src="{{ imagenes.0 }}" alt="{{ nombre }}" class="club-imagen">
-        <p>{{ descripcion }}</p>
+        <img src="/{{ club.imagen }}" alt="{{ nombre }}" class="club-imagen">
+        <p>{{ club.descripcion }}</p>
     </div>
 
     <div class="submenu">
