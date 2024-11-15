@@ -1,18 +1,17 @@
 {% extends 'estiloGeneral.html' %}
 {% load static %}
 
-{% block title %}Detalles del Club: {{ nombre }}{% endblock %}
+{% block title %}Detalles del Club: {{ club.nombre }}{% endblock %}
 
 {% block estilosExtra %}
 <link rel="stylesheet" href="{% static 'css/detallesClub.css' %}">
 {% endblock %}
 
 {% block contenidoPrincipal %}
-
 <main class="detalle-club">
     <h1>{{ club.nombre }}</h1>
     <div class="club-contenido">
-        <img src="/{{ club.imagen }}" alt="{{ nombre }}" class="club-imagen">
+        <img src="/{{ club.imagen }}" alt="{{ club.nombre }}" class="club-imagen">
         <p>{{ club.descripcion }}</p>
     </div>
 
@@ -25,18 +24,37 @@
 
     <div id="noticias" class="contenido-seccion active">
         <h2>Publicaciones del Club</h2>
+        <div class="botones-agregar">
+            <a href="{% url 'agregar_noticia' club.nombre %}" style="color: black;">Agregar Noticia</a>
+            <a href="{% url 'agregar_evento' club.nombre %}" style="color: black;">Agregar Evento</a>
+        </div>
         <div class="lista-publicaciones">
             {% for publicacion in publicaciones %}
                 <div class="publicacion">
                     <h3>{{ publicacion.titulo }}</h3>
                     <p>{{ publicacion.contenido }}</p>
                     <div class="imagenes-publicacion">
-                        {% for img in publicacion.imagenes %}
-                            <img src="{{ img }}" alt="Imagen de publicación" class="publicacion-img">
+                        {% for img in publicacion.imagenes.all %}
+                            <img src="{{ img.imagen.url }}" alt="Imagen de publicación" class="publicacion-img">
                         {% endfor %}
                     </div>
                 </div>
             {% endfor %}
+
+            <div class="lista-eventos">
+                {% for evento in eventos %}
+                    <div class="evento publicacion">
+                        <h3>{{ evento.nombre }}</h3>
+                        <p>{{ evento.descripcion }}</p>
+                        <div class="imagenes-evento imagenes-publicacion">
+                            {% for img in evento.imagenes.all %}
+                                <img src="{{ img.imagen.url }}" alt="Imagen de evento" class="evento-img">
+                            {% endfor %}
+                        </div>
+                        <a href="#" class="boton-asistir" style="color: black;">Asistir al Evento</a>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
@@ -92,11 +110,9 @@
         if (mensajeTexto) {
             const mensajesDiv = document.getElementById('chat-mensajes');
             const nuevoMensaje = document.createElement('div');
-            nuevoMensaje.classList.add('chat-mensaje');
             nuevoMensaje.textContent = mensajeTexto;
             mensajesDiv.appendChild(nuevoMensaje);
-            mensajeInput.value = ''; 
-            mensajesDiv.scrollTop = mensajesDiv.scrollHeight; 
+            mensajeInput.value = '';
         }
     }
 </script>

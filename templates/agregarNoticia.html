@@ -1,0 +1,30 @@
+{% extends 'estiloGeneral.html' %}
+{% load static %}
+
+{% block title %}Agregar Noticia - {{ club.nombre }}{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="agregar-noticia">
+    <h1>Agregar Noticia al Club: {{ club.nombre }}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
+        </div>
+        
+        <div>
+            <label for="contenido">Contenido:</label>
+            <textarea id="contenido" name="contenido" rows="5" required></textarea>
+        </div>
+        
+        <div>
+            <label for="imagenes">Imágenes:</label>
+            <input type="file" name="imagenes" accept="image/*">
+        </div>
+
+        <button type="submit" class="boton">Agregar Noticia</button>
+    </form>
+    <a href="{% url 'detalle_club' club.nombre %}" class="boton regresar">Regresar a detalles del club</a>
+</main>
+{% endblock %}
