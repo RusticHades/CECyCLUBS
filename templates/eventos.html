@@ -1,0 +1,20 @@
+{% extends 'estiloGeneral.html' %}
+{% block title %}Calendario de Eventos{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="calendario">
+    <h1>Calendario de Eventos</h1>
+    <div class="eventos-lista">
+        {% for evento in eventos %}
+            <div class="evento-item">
+                <h2>{{ evento.nombre }}</h2>
+                <p>{{ evento.descripcion }}</p>
+                <p><strong>Fecha:</strong> {{ evento.fecha }}</p>
+                {% if evento.imagen %}
+                    <img src="{{ evento.imagen }}" alt="{{ evento.nombre }}" class="evento-img">
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
