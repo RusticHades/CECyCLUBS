@@ -31,8 +31,8 @@
             <ul>
                 <li><a href="{% url 'inicio' %}">Inicio</a></li>
                 <li><a href="{% url 'clubes' %}">Clubes</a></li>
-                <li><a href="#eventos">Eventos</a></li>
-                <li><a href="#configuracion">Configuración</a></li>
+                <li><a href="{% url 'eventos' %}">Eventos</a></li>
+                <li><a href="{% url 'configuracion:configuracion' %}">Configuración</a></li>
             </ul>
         </nav>
         <button class="menu-btn" onclick="menuDesplegable()">☰</button>
