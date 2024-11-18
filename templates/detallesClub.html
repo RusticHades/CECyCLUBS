@@ -51,7 +51,7 @@
                                 <img src="{{ img.imagen.url }}" alt="Imagen de evento" class="evento-img">
                             {% endfor %}
                         </div>
-                        <a href="#" class="boton-asistir" style="color: black;">Asistir al Evento</a>
+                        <a href="{% url 'asistir_evento' evento.id %}" class="boton-asistir" style="color: black;">Asistir al Evento</a>
                     </div>
                 {% endfor %}
             </div>

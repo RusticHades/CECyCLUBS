@@ -145,3 +145,17 @@ def clubes(request):
 
     # Pasar el diccionario de categorías al template
     return render(request, 'clubes.html', {'clubes': categorias})
+
+from eventos.models import EventoAsistido
+
+def asistir_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+
+    # Crear un registro en la tabla de eventos asistidos
+    EventoAsistido.objects.create(
+        nombre=evento.titulo,
+        descripcion=evento.descripcion,
+        fecha=evento.fecha,
+        imagen=evento.imagenes.first().imagen.url if evento.imagenes.exists() else None,
+    )
+    return redirect('detalle_club', nombre=evento.club.nombre)

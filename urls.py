@@ -11,4 +11,5 @@ urlpatterns = [
     path('<str:nombre>/agregar_noticia/', views.agregar_noticia, name='agregar_noticia'),
     path('<str:nombre>/agregar_evento/', views.agregar_evento, name='agregar_evento'),
     path('solicitar_club', views.solicitar_club, name='solicitar_club'),
+    path('asistir-evento/<int:evento_id>/', views.asistir_evento, name='asistir_evento'),
 ] 
