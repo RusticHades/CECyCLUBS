@@ -1,3 +1,6 @@
+AUTH_USER_MODEL = 'configuracion.Usuario'  
+LOGIN_URL = 'configuracion:inicio_sesion'
+
 """
 Django settings for CECyCLUBS project.
 
@@ -39,6 +42,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'inicio',
     'clubes',
+    'eventos',
+    'configuracion',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
