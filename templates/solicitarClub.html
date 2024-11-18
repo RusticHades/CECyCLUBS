@@ -5,7 +5,7 @@
 {% block contenidoPrincipal %}
 <main>
     <div class="formulario-contenido">
-        <h2>Registro de Club</h2>
+        <h2>Solicitar Club</h2>
         <form action="{% url 'solicitar_club' %}" method="POST">
             {% csrf_token %}
             <div class="grupo-formulario">
@@ -14,12 +14,7 @@
                     <span>Nombre del club</span>
                 </label>
             </div>
-            <div class="grupo-formulario">
-                <label for="descripcion">
-                    <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
-                    <span>Descripción del club</span>
-                </label>
-            </div>
+            <!-- Se ha eliminado la parte de la descripción -->
             <div class="grupo-formulario">
                 <label for="categoria">
                     <select id="categoria" name="categoria" required>
@@ -45,7 +40,6 @@
 </main>
 
 <style>
-
 :root {
     --color-principal: #ff5733;
     --color-secundario: #ffc300;

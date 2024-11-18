@@ -2,20 +2,50 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Club, SolicitudClub, Publicacion, Evento, ImagenPublicacion, ImagenEvento
 from django.core.files.storage import FileSystemStorage
 import os
+from django.contrib.auth.decorators import login_required
 
-# Vista para ver los detalles de un club
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Club, SolicitudClub, Publicacion, Evento, ImagenPublicacion, ImagenEvento
+from django.core.files.storage import FileSystemStorage
+import os
+from django.contrib.auth.decorators import login_required
+
+from django.shortcuts import render, get_object_or_404
+from .models import Club, Publicacion, Evento
+from django.contrib.auth.decorators import login_required
+
 def detalles_club(request, nombre):
+    # Obtén el club
     club = get_object_or_404(Club, nombre=nombre)
+    
+    # Filtra las publicaciones y eventos
     publicaciones = Publicacion.objects.filter(club=club)
     eventos = Evento.objects.filter(club=club)
     
+    # Obtén los miembros del club
+    miembros = club.miembros.all()  # Aquí estás obteniendo los miembros
+
+    # Verificar si el usuario es miembro del club
+    es_miembro = request.user in club.miembros.all()
+
+    # Pasar los miembros con la URL de la imagen correctamente
+    for miembro in miembros:
+        if miembro.foto_perfil:
+            miembro.foto_perfil_url = '/' + miembro.foto_perfil.name
+        else:
+            miembro.foto_perfil_url = None  # Si no hay foto, asigna None
+
     return render(request, 'detallesClub.html', {
         'club': club,
         'publicaciones': publicaciones,
         'eventos': eventos,
+        'miembros': miembros,  # Los miembros se pasan al template
+        'es_miembro': es_miembro,  # Verifica si el usuario es miembro
     })
 
+
 # Vista para agregar una noticia
+@login_required
 def agregar_noticia(request, nombre):
     club = get_object_or_404(Club, nombre=nombre)
 
@@ -43,6 +73,7 @@ def agregar_noticia(request, nombre):
     return render(request, 'agregarNoticia.html', {'club': club})
 
 # Vista para agregar un evento
+@login_required
 def agregar_evento(request, nombre):
     club = get_object_or_404(Club, nombre=nombre)
 
@@ -70,30 +101,41 @@ def agregar_evento(request, nombre):
 
     return render(request, 'agregarEvento.html', {'club': club})
 
-# Vista para mostrar el formulario de solicitud de club
+@login_required
+def unirse_club(request, nombre):
+    club = get_object_or_404(Club, nombre=nombre)
+
+    # Agregar al usuario al club
+    club.miembros.add(request.user)
+    return redirect('detalle_club', nombre=club.nombre)
+
+
+# Vista para mostrar el formulario de solicitud
+@login_required
 def solicitar_club(request):
     if request.method == 'POST':
         nombre = request.POST['nombre']
-        descripcion = request.POST['descripcion']
         categoria = request.POST['categoria']
         actividades = request.POST['actividades']
         
-        # Crear una nueva solicitud de club
+        # Crear una nueva solicitud de club sin la descripción
         SolicitudClub.objects.create(
             nombre=nombre,
-            descripcion=descripcion,
             categoria=categoria,
             actividades=actividades
         )
     
     return render(request, 'solicitarClub.html')
 
+
 # Vista para mostrar las solicitudes pendientes de clubs
+@login_required
 def solicitudes(request):
     solicitudes = SolicitudClub.objects.filter(estatus='pendiente')
     return render(request, 'solicitudes.html', {'solicitudes': solicitudes})
 
 # Vista para rechazar una solicitud de club
+@login_required
 def rechazar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudClub, id=solicitud_id)
     solicitud.estatus = 'rechazado'
@@ -101,6 +143,7 @@ def rechazar_solicitud(request, solicitud_id):
     return redirect('solicitudes')
 
 # Vista para aprobar una solicitud e implementarla como club
+@login_required
 def implementar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudClub, id=solicitud_id)
     
@@ -148,6 +191,7 @@ def clubes(request):
 
 from eventos.models import EventoAsistido
 
+@login_required
 def asistir_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
 

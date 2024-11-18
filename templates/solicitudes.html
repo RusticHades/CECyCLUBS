@@ -74,7 +74,6 @@
                 <div class="solicitud-card">
                     <h2 class="solicitud-titulo">{{ solicitud.nombre }}</h2>
                     <p class="solicitud-categoria">{{ solicitud.categoria }}</p>
-                    <p class="solicitud-descripcion"><strong>Descripción:</strong> {{ solicitud.descripcion }}</p>
                     <p class="solicitud-actividades"><strong>Actividades:</strong> {{ solicitud.actividades }}</p>
                     <div class="solicitud-acciones">
                         <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn-rechazar">Rechazar</a>

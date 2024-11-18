@@ -1,14 +1,19 @@
 from django.db import models
 
 # Modelo de Club
+from django.conf import settings
+from django.db import models
+
 class Club(models.Model):
     nombre = models.CharField(max_length=255)
     descripcion = models.TextField()
     imagen = models.ImageField(upload_to='clubes/', blank=True, null=True)
     categoria = models.CharField(max_length=100)
+    miembros = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='clubs', blank=True)  # Usar AUTH_USER_MODEL
 
     def __str__(self):
         return self.nombre
+
 
 # Modelo de Evento
 class Evento(models.Model):

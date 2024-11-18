@@ -14,6 +14,13 @@
         <img src="/{{ club.imagen }}" alt="{{ club.nombre }}" class="club-imagen">
         <p>{{ club.descripcion }}</p>
     </div>
+    {% if not es_miembro %}
+    <a href="{% url 'unirse_club' nombre=club.nombre %}" style="color: black;">Unirse al club</a>
+{% else %}
+    <p>Ya eres miembro de este club.</p>
+{% endif %}
+
+
 
     <div class="submenu">
         <button onclick="mostrarSeccion('noticias')" class="submenu-button active" id="noticias-tab">Noticias</button>
@@ -63,12 +70,14 @@
         <div class="lista-miembros">
             {% for miembro in miembros %}
                 <div class="miembro">
-                    <img src="{{ miembro.imagen }}" alt="{{ miembro.nombre }}" class="miembro-img">
-                    <span>{{ miembro.nombre }}</span>
+                    <!-- Mostrar imagen de perfil desde la URL generada -->
+                    <img src="{{ miembro.foto_perfil_url }}" alt="{{ miembro.nombre }}" class="miembro-img">
+                    <span style="color: black;">{{ miembro.nombre_completo }}</span>
                 </div>
             {% endfor %}
         </div>
     </div>
+    
 
     <div id="chat" class="contenido-seccion" style="display: none;">
         <h2>Chat Grupal</h2>
