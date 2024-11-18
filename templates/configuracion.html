@@ -1,0 +1,133 @@
+{% extends 'estiloGeneral.html' %}
+{% load static %}
+
+{% block title %}Configuración{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="configuracion">
+    {% if user.is_authenticated %}
+        <section class="configuracion-usuario">
+            <h1>Configuración de Usuario</h1>
+            <div class="usuario-info">
+                <img src="/{{ user.foto_perfil }}" alt="Foto de Perfil" class="foto-perfil">
+                <div class="detalles">
+                    <p><strong>Nombre:</strong> {{ user.nombre_completo }}</p>
+                    <p><strong>Correo:</strong> {{ user.email }}</p>
+                    <p><strong>Rol:</strong> {{ user.rol }}</p>
+                </div>
+            </div>
+            <div class="acciones">
+                <a href="{% url 'configuracion:editar_perfil' %}" class="btn">Editar Perfil</a>
+                <a href="{% url 'configuracion:cerrar_sesion' %}" class="btn btn-peligro">Cerrar Sesión</a>
+            </div>
+        </section>
+    {% else %}
+        <section class="inicio-sesion-requerido">
+            <h1>Debes iniciar sesión para acceder a esta página</h1>
+            <a href="{% url 'inicio_sesion' %}" class="btn">Iniciar Sesión</a>
+        </section>
+    {% endif %}
+</main>
+
+<style>
+    :root {
+    --color-principal: #ff5733;
+    --color-secundario: #ffc300;
+    --color-parrafo: #ffffff;
+    --color-fondo: #f8f8f8;
+    --color-parrafoNormal: #333;
+    --color-error: #e63946;
+}
+
+main.configuracion {
+    padding: 2rem;
+    background-color: var(--color-fondo);
+    color: var(--color-parrafoNormal);
+}
+
+.configuracion-usuario {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--color-parrafo);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.usuario-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.usuario-info .foto-perfil {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid var(--color-principal);
+    object-fit: cover;
+}
+
+.usuario-info .detalles p {
+    margin: 0.5rem 0;
+    color: var(--color-parrafoNormal);
+}
+
+.acciones {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.acciones .btn {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-principal);
+    color: var(--color-parrafo);
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.acciones .btn:hover {
+    background-color: var(--color-secundario);
+    transform: scale(1.05);
+}
+
+.acciones .btn-peligro {
+    background-color: var(--color-error);
+    color: var(--color-parrafo);
+}
+
+.acciones .btn-peligro:hover {
+    background-color: #d62828;
+}
+
+.inicio-sesion-requerido {
+    text-align: center;
+    padding: 2rem;
+    background: var(--color-parrafo);
+    border: 2px solid var(--color-principal);
+    border-radius: 8px;
+    color: var(--color-parrafoNormal);
+}
+
+.inicio-sesion-requerido .btn {
+    margin-top: 1rem;
+    display: inline-block;
+    background: var(--color-principal);
+    color: var(--color-parrafo);
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.inicio-sesion-requerido .btn:hover {
+    background: var(--color-secundario);
+    transform: scale(1.05);
+}
+
+</style>
+{% endblock %}

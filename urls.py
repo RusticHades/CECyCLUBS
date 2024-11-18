@@ -1,0 +1,14 @@
+from django.urls import path
+from . import views
+from django.contrib.auth.views import LogoutView
+
+# Registrar el namespace
+app_name = 'configuracion'
+
+urlpatterns = [
+    path('registro/', views.registro_usuario, name='registro'),
+    path('iniciar-sesion/', views.inicio_sesion, name='inicio_sesion'),
+    path('cerrar-sesion/', views.cerrar_sesion, name='cerrar_sesion'),
+    path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
+    path('', views.configuracion, name='configuracion'),
+]
