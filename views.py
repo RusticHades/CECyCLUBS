@@ -116,3 +116,15 @@ def cambiar_rol(request, usuario_id):
         usuario.rol = nuevo_rol
         usuario.save()
         return redirect('configuracion:configuracion')
+    
+@user_passes_test(es_administrador)
+def eliminar_usuario(request, usuario_id):
+    if request.method == 'POST':
+        usuario = get_object_or_404(Usuario, pk=usuario_id)
+        
+        # Evitar que un administrador se elimine a sí mismo
+        if usuario == request.user:
+            return redirect('configuracion:configuracion')  # Opcional: muestra un mensaje de error
+        
+        usuario.delete()  # Elimina al usuario de la base de datos
+        return redirect('configuracion:configuracion')

@@ -31,7 +31,6 @@
                     <input type="text" name="query" placeholder="Buscar usuario" required class="input-busqueda">
                     <button type="submit" class="btn-buscar"><i class="fas fa-search"></i> Buscar</button>
                 </form>
-                
             </div>
             {% if usuarios %}
             <div class="tabla-container">
@@ -51,14 +50,20 @@
                             <td>{{ usuario.email }}</td>
                             <td>{{ usuario.rol }}</td>
                             <td>
-                                <form method="POST" action="{% url 'configuracion:cambiar_rol' usuario.id %}">
-                                    {% csrf_token %}
-                                    <select name="rol" required>
-                                        <option value="usuario" {% if usuario.rol == 'usuario' %}selected{% endif %}>Usuario</option>
-                                        <option value="administrador" {% if usuario.rol == 'administrador' %}selected{% endif %}>Administrador</option>
-                                    </select>
-                                    <button type="submit" class="btn">Actualizar</button>
-                                </form>
+                                <div class="acciones-tabla">
+                                    <form method="POST" action="{% url 'configuracion:eliminar_usuario' usuario.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-peligro">Eliminar</button>
+                                    </form>
+                                    <form method="POST" action="{% url 'configuracion:cambiar_rol' usuario.id %}">
+                                        {% csrf_token %}
+                                        <select name="rol" required>
+                                            <option value="usuario" {% if usuario.rol == 'usuario' %}selected{% endif %}>Usuario</option>
+                                            <option value="administrador" {% if usuario.rol == 'administrador' %}selected{% endif %}>Administrador</option>
+                                        </select>
+                                        <button type="submit" class="btn">Actualizar</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -104,11 +109,6 @@
         transition: box-shadow 0.3s;
     }
 
-    .configuracion-usuario:hover,
-    .configuracion-admin:hover {
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-    }
-
     .usuario-info {
         display: flex;
         align-items: center;
@@ -124,69 +124,39 @@
         object-fit: cover;
     }
 
-    .usuario-info .detalles p {
-        margin: 0.5rem 0;
-        color: var(--color-parrafoNormal);
-        font-size: 1.1rem;
-    }
-
-    .acciones {
+    .acciones,
+    .acciones-tabla {
         display: flex;
-        gap: 1.5rem;
+        gap: 1rem;
         justify-content: center;
+        align-items: center;
     }
 
-    .acciones .btn {
+    .btn {
         padding: 0.75rem 1.5rem;
         background-color: var(--color-principal);
         color: var(--color-parrafo);
-        text-decoration: none;
+        border: none;
         border-radius: 8px;
         font-weight: bold;
+        cursor: pointer;
         transition: background-color 0.3s, transform 0.2s;
         text-align: center;
     }
 
-    .acciones .btn:hover {
+    .btn:hover {
         background-color: var(--color-secundario);
         transform: scale(1.05);
         color: var(--color-parrafoNormal);
     }
 
-    .acciones .btn-peligro {
+    .btn-peligro {
         background-color: var(--color-error);
-        color: var(--color-parrafo);
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
+        color: var(--color-fondo);
     }
 
-    .acciones .btn-peligro:hover {
+    .btn-peligro:hover {
         background-color: #d62828;
-    }
-
-    .inicio-sesion-requerido {
-        text-align: center;
-        padding: 2rem;
-        background: var(--color-parrafo);
-        border: 2px solid var(--color-principal);
-        border-radius: 12px;
-        color: var(--color-parrafoNormal);
-    }
-
-    .inicio-sesion-requerido .btn {
-        margin-top: 1rem;
-        display: inline-block;
-        background: var(--color-principal);
-        color: var(--color-parrafo);
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        text-decoration: none;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    .inicio-sesion-requerido .btn:hover {
-        background: var(--color-secundario);
-        transform: scale(1.05);
     }
 
     .tabla-container {
@@ -211,15 +181,10 @@
         color: var(--color-parrafo);
     }
 
-    .tabla-usuarios td {
-        background-color: #fff;
-    }
-
     .tabla-usuarios tr:hover {
         background-color: #f1f1f1;
     }
 
-    /* Barra de búsqueda mejorada */
     .barra-busqueda {
         display: flex;
         align-items: center;
