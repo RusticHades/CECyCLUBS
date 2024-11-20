@@ -39,9 +39,10 @@
             </div>            
             
             <div class="grupo-formulario">
-                <label for="foto_perfil">
-                    <input type="file" name="foto_perfil" accept="image/*">
-                    <span>Foto de Perfil (opcional)</span>
+                <label for="inputFile">
+                    Foto de Perfil (opcional)
+                    <input type="file" id="inputFile" name="foto_perfil" accept="image/*">
+                    <img id="foto_File" alt="">
                 </label>
             </div>
             
@@ -102,7 +103,7 @@ h2 {
     align-items: center;
 }
 
-.grupo-formulario label {
+.grupo-formulario label, select {
     width: 100%;
     max-width: 350px;
     display: flex;
@@ -111,7 +112,17 @@ h2 {
     position: relative;
 }
 
-.grupo-formulario input,
+.grupo-formulario input[type="file"] {
+    display: none;
+}
+
+.grupo-formulario img{
+    padding: 2vw;
+    max-width: 12vw;
+    margin: auto;
+}
+
+.grupo-formulario input:not([type="file"]),
 .grupo-formulario select {
     padding: 15px;
     font-size: 16px;
@@ -174,4 +185,18 @@ button[type="submit"]:active {
     background: #e64a19;
 }
 </style>
+
+<script>
+    document.getElementById('inputFile').addEventListener('change', ()=>{
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('foto_File').setAttribute('src', e.target.result)
+        }
+
+        let file = document.getElementById('inputFile').files[0];
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    })
+</script>
 {% endblock %}
