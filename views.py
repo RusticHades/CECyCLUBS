@@ -178,7 +178,12 @@ def implementar_solicitud(request, solicitud_id):
 # Vista para mostrar los clubes agrupados por categoría
 def clubes(request):
     clubes = Club.objects.all()
-    
+
+    # Si hay una búsqueda, filtrar los clubes por nombre
+    busqueda = request.GET.get('busqueda', '')
+    if busqueda:
+        clubes = clubes.filter(nombre__icontains=busqueda)  # Filtrar por nombre del club (case-insensitive)
+
     # Agrupar los clubes por categoría
     categorias = {}
     for club in clubes:
@@ -187,7 +192,8 @@ def clubes(request):
         categorias[club.categoria].append(club)
 
     # Pasar el diccionario de categorías al template
-    return render(request, 'clubes.html', {'clubes': categorias})
+    return render(request, 'clubes.html', {'clubes': categorias, 'busqueda': busqueda})
+
 
 from eventos.models import EventoAsistido
 

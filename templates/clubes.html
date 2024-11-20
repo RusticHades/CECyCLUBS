@@ -3,7 +3,6 @@
 
 {% block title %}Clubes{% endblock %}
 
-
 {% block estilosExtra %}
 <link rel="stylesheet" href="{% static 'css/clubes.css' %}">
 {% endblock %}
@@ -13,18 +12,25 @@
 <main id="clubes-section">
     <!-- Barra de búsqueda -->
     <div class="busqueda-clubes">
-        <input type="text" id="busqueda" placeholder="Buscar clubes...">
-        <button type="submit">Buscar</button>
+        <form method="GET">
+            <input type="text" id="busqueda" name="busqueda" placeholder="Buscar clubes..." value="{{ busqueda }}">
+            <button type="submit">Buscar</button>
+        </form>
     </div>
 
-    <!-- Botón para solicitar nuevos clubes -->
+    <!-- Botón para solicitar nuevos clubes visible solo para usuarios con rol 'usuario' -->
+    {% if user.rol == 'usuario' %}
     <div class="solicitar-club">
         <a href="{% url 'solicitar_club' %}" class="btn-solicitar">Solicitar nuevo club</a>
     </div>
+    {% endif %}
 
+    <!-- Botón para acceder a las solicitudes visible solo para usuarios con rol 'administrador' -->
+    {% if user.rol == 'administrador' %}
     <div class="solicitudes">
         <a href="{% url 'solicitudes' %}" class="btn-solicitar">Solicitudes</a>
     </div>
+    {% endif %}
 
     <!-- Clasificador por categorías -->
     {% for categoria, clubes_categoria in clubes.items %}

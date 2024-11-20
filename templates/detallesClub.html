@@ -31,10 +31,13 @@
 
     <div id="noticias" class="contenido-seccion active">
         <h2>Publicaciones del Club</h2>
+        {% if user.rol == 'administrador' %}
         <div class="botones-agregar">
             <a href="{% url 'agregar_noticia' club.nombre %}" style="color: black;">Agregar Noticia</a>
             <a href="{% url 'agregar_evento' club.nombre %}" style="color: black;">Agregar Evento</a>
         </div>
+        {% endif %}
+
         <div class="lista-publicaciones">
             {% for publicacion in publicaciones %}
                 <div class="publicacion">
