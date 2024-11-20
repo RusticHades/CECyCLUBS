@@ -94,3 +94,25 @@ def editar_perfil(request):
 @login_required
 def configuracion(request):
     return render(request, 'configuracion.html')
+
+from django.contrib.auth.decorators import user_passes_test
+
+def es_administrador(usuario):
+    return usuario.is_authenticated and usuario.rol == 'administrador'
+
+
+@user_passes_test(es_administrador)
+def buscar_usuario(request):
+    query = request.GET.get('query', '')
+    usuarios = Usuario.objects.filter(nombre_completo__icontains=query).exclude(pk=request.user.pk)
+    return render(request, 'configuracion.html', {'usuarios': usuarios})
+
+
+@user_passes_test(es_administrador)
+def cambiar_rol(request, usuario_id):
+    if request.method == 'POST':
+        nuevo_rol = request.POST.get('rol')
+        usuario = get_object_or_404(Usuario, pk=usuario_id)
+        usuario.rol = nuevo_rol
+        usuario.save()
+        return redirect('configuracion:configuracion')

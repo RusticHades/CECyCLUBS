@@ -4,6 +4,7 @@
 {% block title %}Configuración{% endblock %}
 
 {% block contenidoPrincipal %}
+
 <main class="configuracion">
     {% if user.is_authenticated %}
         <section class="configuracion-usuario">
@@ -21,6 +22,52 @@
                 <a href="{% url 'configuracion:cerrar_sesion' %}" class="btn btn-peligro">Cerrar Sesión</a>
             </div>
         </section>
+
+        {% if user.rol == 'administrador' %}
+        <section class="configuracion-admin">
+            <h1>Opciones de Administrador</h1>
+            <div class="acciones-admin">
+                <form method="GET" action="{% url 'configuracion:buscar_usuario' %}" class="barra-busqueda">
+                    <input type="text" name="query" placeholder="Buscar usuario" required class="input-busqueda">
+                    <button type="submit" class="btn-buscar"><i class="fas fa-search"></i> Buscar</button>
+                </form>
+                
+            </div>
+            {% if usuarios %}
+            <div class="tabla-container">
+                <table class="tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.nombre_completo }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>{{ usuario.rol }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'configuracion:cambiar_rol' usuario.id %}">
+                                    {% csrf_token %}
+                                    <select name="rol" required>
+                                        <option value="usuario" {% if usuario.rol == 'usuario' %}selected{% endif %}>Usuario</option>
+                                        <option value="administrador" {% if usuario.rol == 'administrador' %}selected{% endif %}>Administrador</option>
+                                    </select>
+                                    <button type="submit" class="btn">Actualizar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </section>
+        {% endif %}
     {% else %}
         <section class="inicio-sesion-requerido">
             <h1>Debes iniciar sesión para acceder a esta página</h1>
@@ -31,103 +78,190 @@
 
 <style>
     :root {
-    --color-principal: #ff5733;
-    --color-secundario: #ffc300;
-    --color-parrafo: #ffffff;
-    --color-fondo: #f8f8f8;
-    --color-parrafoNormal: #333;
-    --color-error: #e63946;
-}
+        --color-principal: #ff5733;
+        --color-secundario: #ffc300;
+        --color-parrafo: #ffffff;
+        --color-fondo: #f8f8f8;
+        --color-parrafoNormal: #333;
+        --color-error: #e63946;
+    }
 
-main.configuracion {
-    padding: 2rem;
-    background-color: var(--color-fondo);
-    color: var(--color-parrafoNormal);
-}
+    main.configuracion {
+        padding: 2rem;
+        background-color: var(--color-fondo);
+        color: var(--color-parrafoNormal);
+        font-family: 'Arial', sans-serif;
+    }
 
-.configuracion-usuario {
-    max-width: 800px;
-    margin: 0 auto;
-    background: var(--color-parrafo);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-}
+    .configuracion-usuario,
+    .configuracion-admin {
+        max-width: 900px;
+        margin: 2rem auto;
+        background: var(--color-parrafo);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        transition: box-shadow 0.3s;
+    }
 
-.usuario-info {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
+    .configuracion-usuario:hover,
+    .configuracion-admin:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
 
-.usuario-info .foto-perfil {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 2px solid var(--color-principal);
-    object-fit: cover;
-}
+    .usuario-info {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
 
-.usuario-info .detalles p {
-    margin: 0.5rem 0;
-    color: var(--color-parrafoNormal);
-}
+    .usuario-info .foto-perfil {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid var(--color-principal);
+        object-fit: cover;
+    }
 
-.acciones {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-}
+    .usuario-info .detalles p {
+        margin: 0.5rem 0;
+        color: var(--color-parrafoNormal);
+        font-size: 1.1rem;
+    }
 
-.acciones .btn {
-    padding: 0.75rem 1.5rem;
-    background-color: var(--color-principal);
-    color: var(--color-parrafo);
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.2s;
-}
+    .acciones {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+    }
 
-.acciones .btn:hover {
-    background-color: var(--color-secundario);
-    transform: scale(1.05);
-}
+    .acciones .btn {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--color-principal);
+        color: var(--color-parrafo);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.2s;
+        text-align: center;
+    }
 
-.acciones .btn-peligro {
-    background-color: var(--color-error);
-    color: var(--color-parrafo);
-}
+    .acciones .btn:hover {
+        background-color: var(--color-secundario);
+        transform: scale(1.05);
+        color: var(--color-parrafoNormal);
+    }
 
-.acciones .btn-peligro:hover {
-    background-color: #d62828;
-}
+    .acciones .btn-peligro {
+        background-color: var(--color-error);
+        color: var(--color-parrafo);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+    }
 
-.inicio-sesion-requerido {
-    text-align: center;
-    padding: 2rem;
-    background: var(--color-parrafo);
-    border: 2px solid var(--color-principal);
-    border-radius: 8px;
-    color: var(--color-parrafoNormal);
-}
+    .acciones .btn-peligro:hover {
+        background-color: #d62828;
+    }
 
-.inicio-sesion-requerido .btn {
-    margin-top: 1rem;
-    display: inline-block;
-    background: var(--color-principal);
-    color: var(--color-parrafo);
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.2s;
-}
+    .inicio-sesion-requerido {
+        text-align: center;
+        padding: 2rem;
+        background: var(--color-parrafo);
+        border: 2px solid var(--color-principal);
+        border-radius: 12px;
+        color: var(--color-parrafoNormal);
+    }
 
-.inicio-sesion-requerido .btn:hover {
-    background: var(--color-secundario);
-    transform: scale(1.05);
-}
+    .inicio-sesion-requerido .btn {
+        margin-top: 1rem;
+        display: inline-block;
+        background: var(--color-principal);
+        color: var(--color-parrafo);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
 
+    .inicio-sesion-requerido .btn:hover {
+        background: var(--color-secundario);
+        transform: scale(1.05);
+    }
+
+    .tabla-container {
+        overflow-x: auto;
+        margin-top: 2rem;
+    }
+
+    .tabla-usuarios {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .tabla-usuarios th {
+        background-color: var(--color-principal);
+        color: var(--color-parrafo);
+    }
+
+    .tabla-usuarios td {
+        background-color: #fff;
+    }
+
+    .tabla-usuarios tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Barra de búsqueda mejorada */
+    .barra-busqueda {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0.5rem;
+        }
+
+    .input-busqueda {
+        width: 80%;
+        padding: 0.75rem 1.25rem;
+        border: 2px solid var(--color-secundario);
+        border-radius: 5px;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-buscar {
+        background-color: var(--color-principal);
+        color: var(--color-parrafo);
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-buscar:hover {
+        background-color: var(--color-secundario);
+        transform: scale(1.05);
+        color: var(--color-parrafoNormal);
+    }
+
+    .btn-buscar i {
+        margin-right: 0.5rem;
+    }
 </style>
+
 {% endblock %}

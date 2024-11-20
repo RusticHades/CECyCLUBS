@@ -11,4 +11,6 @@ urlpatterns = [
     path('cerrar-sesion/', views.cerrar_sesion, name='cerrar_sesion'),
     path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
     path('', views.configuracion, name='configuracion'),
+    path('buscar-usuario/', views.buscar_usuario, name='buscar_usuario'),
+    path('cambiar-rol/<int:usuario_id>/', views.cambiar_rol, name='cambiar_rol'),
 ]
