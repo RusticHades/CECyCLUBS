@@ -32,20 +32,27 @@
     </div>
     {% endif %}
 
-    <!-- Clasificador por categorías -->
-    {% for categoria, clubes_categoria in clubes.items %}
-        <h2>{{ categoria }}</h2>
-        <div class="clubes-categoria">
-            {% for club in clubes_categoria %}
-                <a href="{% url 'detalle_club' club.nombre %}" class="club">
-                    <img src="/{{ club.imagen }}" alt="{{ club.nombre }}">
-                    <h3>{{ club.nombre }}</h3>
-                    <p class="integrantes">Integrantes: {{ club.miembros.count }}</p>
-                    <button class="ver-mas">Ver más</button>
-                </a>
-            {% endfor %}
+    <!-- Verificar si hay clubes -->
+    {% if clubes %}
+        <!-- Clasificador por categorías -->
+        {% for categoria, clubes_categoria in clubes.items %}
+            <h2>{{ categoria }}</h2>
+            <div class="clubes-categoria">
+                {% for club in clubes_categoria %}
+                    <a href="{% url 'detalle_club' club.nombre %}" class="club">
+                        <img src="/{{ club.imagen }}" alt="{{ club.nombre }}">
+                        <h3>{{ club.nombre }}</h3>
+                        <p class="integrantes">Integrantes: {{ club.miembros.count }}</p>
+                        <button class="ver-mas">Ver más</button>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-clubes">
+            <p>No existen clubes por ahora</p>
         </div>
-    {% endfor %}
+    {% endif %}
 </main>
 
 {% endblock %}
