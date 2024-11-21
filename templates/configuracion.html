@@ -53,6 +53,7 @@
                             <td>{{ usuario.rol }}</td>
                             <td>
                                 <div class="acciones-tabla">
+                                    <a href="{% url 'configuracion:ver_usuario' usuario.id %}" class="btn">Ver Información</a>
                                     <form method="POST" action="{% url 'configuracion:eliminar_usuario' usuario.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-peligro">Eliminar</button>
@@ -67,6 +68,7 @@
                                     </form>
                                 </div>
                             </td>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -116,7 +118,6 @@
             {% endif %}
         </section>
         {% endif %}
-
 
     {% else %}
         <section class="inicio-sesion-requerido">

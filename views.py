@@ -9,6 +9,28 @@ from .models import Usuario
 from clubes.models import Club
 
 @login_required
+def ver_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    clubes = usuario.clubs.all()  # Obtiene los clubes a los que el usuario pertenece
+    return render(request, 'verUsuario.html', {
+        'usuario': usuario,
+        'clubes': clubes,
+    })
+
+@login_required
+def expulsar_de_club(request, club_id, usuario_id):
+    if not request.user.is_authenticated or request.user.rol != 'administrador':
+        return redirect('configuracion:inicio_sesion')
+
+    club = get_object_or_404(Club, id=club_id)
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+
+    if usuario in club.miembros.all():
+        club.miembros.remove(usuario)  # Elimina al usuario del club
+
+    return redirect('configuracion:ver_usuario', usuario_id=usuario.id)
+
+@login_required
 def buscar_club(request):
     query = request.GET.get('query', '')
     clubes = Club.objects.filter(nombre__icontains=query) if query else None

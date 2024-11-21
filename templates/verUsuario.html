@@ -1,0 +1,45 @@
+{% extends 'estiloGeneral.html' %}
+{% block title %}Ver Usuario{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="ver-usuario">
+    <h1>Información de Usuario</h1>
+    <div class="usuario-info">
+        <img src="/{{ usuario.foto_perfil }}" alt="Foto de Perfil" class="foto-perfil">
+        <div class="detalles">
+            <p><strong>Nombre:</strong> {{ usuario.nombre_completo }}</p>
+            <p><strong>Correo:</strong> {{ usuario.email }}</p>
+            <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+        </div>
+    </div>
+
+    <h2>Clubes a los que pertenece</h2>
+    {% if clubes %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for club in clubes %}
+            <tr>
+                <td>{{ club.nombre }}</td>
+                <td>{{ club.categoria }}</td>
+                <td>
+                    <form method="POST" action="{% url 'configuracion:expulsar_de_club' club.id usuario.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-peligro">Expulsar del club</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>El usuario no pertenece a ningún club.</p>
+    {% endif %}
+</main>
+{% endblock %}
