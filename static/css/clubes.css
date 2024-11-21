@@ -69,7 +69,6 @@
     transform: translateY(-2px);
 }
 
-
 /* Categorías de clubes */
 h2 {
     text-align: center;
@@ -95,15 +94,16 @@ h2 {
     text-align: center;
     border-radius: 10px;
     margin-bottom: 30px;
-    transition: transform 0.6s ease-in-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     text-decoration: none;
     color: inherit;
-    height: 300px;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .club img {
@@ -129,10 +129,7 @@ h2 {
 
 .club:hover {
     transform: translateY(-10px);
-}
-
-.club:hover .integrantes {
-    opacity: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .ver-mas {

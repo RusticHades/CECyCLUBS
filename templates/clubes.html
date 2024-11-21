@@ -40,7 +40,7 @@
                 <a href="{% url 'detalle_club' club.nombre %}" class="club">
                     <img src="/{{ club.imagen }}" alt="{{ club.nombre }}">
                     <h3>{{ club.nombre }}</h3>
-                    <p class="integrantes">Integrantes: {{ club.integrantes }}</p>
+                    <p class="integrantes">Integrantes: {{ club.miembros.count }}</p>
                     <button class="ver-mas">Ver más</button>
                 </a>
             {% endfor %}
