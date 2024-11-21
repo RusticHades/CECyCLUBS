@@ -24,8 +24,10 @@
         </section>
 
         {% if user.rol == 'administrador' %}
+        <h1>Opciones de Administrador</h1>
+
         <section class="configuracion-admin">
-            <h1>Opciones de Administrador</h1>
+            <h2>Configuracion de usuarios</h2>
             <div class="acciones-admin">
                 <form method="GET" action="{% url 'configuracion:buscar_usuario' %}" class="barra-busqueda">
                     <input type="text" name="query" placeholder="Buscar usuario" required class="input-busqueda">
@@ -72,7 +74,50 @@
             </div>
             {% endif %}
         </section>
+        <section class="configuracion-admin">
+            <h2>Configuracion de clubes</h2>
+            <div class="acciones-admin">
+                <form method="GET" action="{% url 'configuracion:buscar_club' %}" class="barra-busqueda">
+                    <input type="text" name="query" placeholder="Buscar club" required class="input-busqueda">
+                    <button type="submit" class="btn-buscar"><i class="fas fa-search"></i> Buscar</button>
+                </form>
+            </div>
+            {% if clubes %}
+            <div class="tabla-container">
+                <table class="tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for club in clubes %}
+                        <tr>
+                            <td>{{ club.nombre }}</td>
+                            <td>{{ club.descripcion }}</td>
+                            <td>{{ club.categoria }}</td>
+                            <td>
+                                <div class="acciones-tabla">
+                                    <a href="{% url 'configuracion:editar_club' club.id %}" class="btn">Editar</a>
+                                    <form method="POST" action="{% url 'configuracion:eliminar_club' club.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este club?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-peligro">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </section>
         {% endif %}
+
+
     {% else %}
         <section class="inicio-sesion-requerido">
             <h1>Debes iniciar sesión para acceder a esta página</h1>

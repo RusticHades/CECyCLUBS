@@ -1,12 +1,39 @@
 import os
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.storage import FileSystemStorage
 from .models import Usuario
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import user_passes_test
+from clubes.models import Club
+
+@login_required
+def buscar_club(request):
+    query = request.GET.get('query', '')
+    clubes = Club.objects.filter(nombre__icontains=query) if query else None
+    return render(request, 'configuracion.html', {'clubes': clubes})
+
+@login_required
+def editar_club(request, club_id):
+    club = get_object_or_404(Club, id=club_id)
+    if request.method == 'POST':
+        club.nombre = request.POST.get('nombre')
+        club.descripcion = request.POST.get('descripcion')
+        club.categoria = request.POST.get('categoria')
+        if 'imagen' in request.FILES:
+            club.imagen = request.FILES['imagen']
+        club.save()
+        messages.success(request, 'El club ha sido actualizado correctamente.')
+        return redirect('configuracion:buscar_club')
+    return render(request, 'editarClub.html', {'club': club})
+
+@login_required
+def eliminar_club(request, club_id):
+    club = get_object_or_404(Club, id=club_id)
+    club.delete()
+    messages.success(request, 'El club ha sido eliminado correctamente.')
+    return redirect('configuracion:buscar_club')
 
 
 def registro_usuario(request):

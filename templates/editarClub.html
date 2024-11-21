@@ -1,0 +1,27 @@
+{% extends 'estiloGeneral.html' %}
+{% load static %}
+
+{% block title %}Editar Club{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="editar-club">
+    <h1>Editar Club</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" value="{{ club.nombre }}" required>
+        
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" required>{{ club.descripcion }}</textarea>
+        
+        <label for="categoria">Categoría</label>
+        <input type="text" id="categoria" name="categoria" value="{{ club.categoria }}" required>
+        
+        <label for="imagen">Imagen</label>
+        <input type="file" id="imagen" name="imagen">
+        
+        <button type="submit" class="btn">Guardar Cambios</button>
+        <a href="{% url 'configuracion:buscar_club' %}" class="btn btn-peligro">Cancelar</a>
+    </form>
+</main>
+{% endblock %}
