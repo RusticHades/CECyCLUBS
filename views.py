@@ -5,6 +5,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from .models import Usuario
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import user_passes_test
 
 
 def registro_usuario(request):
@@ -16,7 +18,7 @@ def registro_usuario(request):
         foto_perfil = request.FILES.get('foto_perfil')
 
         # Ruta base para guardar imágenes
-        user_folder = f'static/images/fotos_perfil/{email}/'
+        user_folder = f'static/images/fotosPerfil/{email}/'
         os.makedirs(user_folder, exist_ok=True)  # Crear carpeta si no existe
 
         foto_url = None
@@ -42,7 +44,6 @@ def registro_usuario(request):
 
     return render(request, 'registro.html')
 
-
 def inicio_sesion(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -57,9 +58,6 @@ def inicio_sesion(request):
 
     return render(request, 'iniciarSesion.html')
 
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def cerrar_sesion(request):
@@ -95,7 +93,6 @@ def editar_perfil(request):
 def configuracion(request):
     return render(request, 'configuracion.html')
 
-from django.contrib.auth.decorators import user_passes_test
 
 def es_administrador(usuario):
     return usuario.is_authenticated and usuario.rol == 'administrador'
