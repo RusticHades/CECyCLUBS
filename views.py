@@ -4,16 +4,6 @@ from django.core.files.storage import FileSystemStorage
 import os
 from django.contrib.auth.decorators import login_required
 
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Club, SolicitudClub, Publicacion, Evento, ImagenPublicacion, ImagenEvento
-from django.core.files.storage import FileSystemStorage
-import os
-from django.contrib.auth.decorators import login_required
-
-from django.shortcuts import render, get_object_or_404
-from .models import Club, Publicacion, Evento
-from django.contrib.auth.decorators import login_required
-
 def detalles_club(request, nombre):
     # Obtén el club
     club = get_object_or_404(Club, nombre=nombre)
@@ -144,27 +134,34 @@ def rechazar_solicitud(request, solicitud_id):
 
 # Vista para aprobar una solicitud e implementarla como club
 @login_required
+@login_required
 def implementar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudClub, id=solicitud_id)
     
     if request.method == 'POST':
+        # Recuperar los datos enviados por el formulario
+        nombre = request.POST['nombre']
+        descripcion = request.POST['descripcion']
+        categoria = request.POST['categoria']
         imagen = request.FILES.get('imagen')
-        
+
+        image_path = None  # Inicializamos por si no hay imagen
+
         if imagen:
             # Definimos el path para guardar la imagen en static
-            club_folder = f'static/images/portadasClub/{solicitud.nombre}/'
+            club_folder = f'static/images/portadasClub/{nombre}/'
             os.makedirs(club_folder, exist_ok=True)  # Crea la carpeta si no existe
             
             # Guardamos la imagen en la carpeta del club
             fs = FileSystemStorage(location=club_folder)
             filename = fs.save(imagen.name, imagen)
             image_path = os.path.join(club_folder, filename)
-        
-        # Crea el club
+
+        # Crear el club con los datos actualizados del formulario
         Club.objects.create(
-            nombre=solicitud.nombre,
-            descripcion=solicitud.descripcion,
-            categoria=solicitud.categoria,
+            nombre=nombre,
+            descripcion=descripcion,
+            categoria=categoria,
             imagen=image_path
         )
         
@@ -174,6 +171,7 @@ def implementar_solicitud(request, solicitud_id):
         return redirect('solicitudes')
     
     return render(request, 'implementarClub.html', {'solicitud': solicitud})
+
 
 # Vista para mostrar los clubes agrupados por categoría
 def clubes(request):
