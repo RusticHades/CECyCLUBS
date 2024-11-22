@@ -67,16 +67,37 @@ def buscar_club(request):
 @login_required
 def editar_club(request, club_id):
     club = get_object_or_404(Club, id=club_id)
+    
     if request.method == 'POST':
         club.nombre = request.POST.get('nombre')
         club.descripcion = request.POST.get('descripcion')
         club.categoria = request.POST.get('categoria')
+        
+        # Revisar si se ha subido una nueva imagen
         if 'imagen' in request.FILES:
-            club.imagen = request.FILES['imagen']
+            imagen = request.FILES['imagen']
+            
+            # Crear una carpeta para la imagen del club
+            club_folder = f'static/images/portadasClub/{club.nombre}/'
+            os.makedirs(club_folder, exist_ok=True)  # Crea la carpeta si no existe
+            
+            # Guardar la imagen en la carpeta
+            fs = FileSystemStorage(location=club_folder)
+            filename = fs.save(imagen.name, imagen)
+            image_path = os.path.join(club_folder, filename)
+            
+            # Actualizar la imagen en el objeto club
+            club.imagen = image_path
+        
+        # Guardar los cambios en el club
         club.save()
+        
+        # Mensaje de éxito
         messages.success(request, 'El club ha sido actualizado correctamente.')
         return redirect('configuracion:buscar_club')
+    
     return render(request, 'editarClub.html', {'club': club})
+
 
 @login_required
 def eliminar_club(request, club_id):
@@ -141,17 +162,29 @@ def cerrar_sesion(request):
     logout(request)  # Cierra la sesión del usuario
     return redirect('configuracion:inicio_sesion')  # Redirige a la página de inicio de sesión
 
+import os
+import shutil
+from django.core.files.storage import FileSystemStorage
+
 @login_required
 def editar_perfil(request):
     if request.method == 'POST':
         request.user.nombre_completo = request.POST['nombre_completo']
         request.user.email = request.POST['email']
+        
+        # Verifica si se subió una nueva foto
         if 'foto_perfil' in request.FILES:
             foto_perfil = request.FILES['foto_perfil']
-
-            # Ruta base para guardar imágenes del usuario
+            
+            # Ruta base para las imágenes del usuario
             user_folder = f'static/images/fotosPerfil/{request.user.email}/'
-            os.makedirs(user_folder, exist_ok=True)  # Crear carpeta si no existe
+            
+            # Eliminar la carpeta y sus contenidos si existe
+            if os.path.exists(user_folder):
+                shutil.rmtree(user_folder)  # Elimina la carpeta con todos los archivos dentro
+
+            # Crear la carpeta nuevamente
+            os.makedirs(user_folder, exist_ok=True)
 
             # Guardar nueva imagen
             fs = FileSystemStorage(location=user_folder)
