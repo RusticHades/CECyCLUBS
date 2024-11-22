@@ -101,24 +101,36 @@ def unirse_club(request, nombre):
     club.miembros.add(request.user)
     return redirect('detalle_club', nombre=club.nombre)
 
+@login_required
+def salir_club(request, nombre):
+    club = get_object_or_404(Club, nombre=nombre)
+
+    # Eliminar al usuario del club
+    club.miembros.remove(request.user)
+    return redirect('detalle_club', nombre=club.nombre)
 
 # Vista para mostrar el formulario de solicitud
 @login_required
 def solicitar_club(request):
+    mensaje = None
     if request.method == 'POST':
         nombre = request.POST['nombre']
         categoria = request.POST['categoria']
         actividades = request.POST['actividades']
         
-        # Crear una nueva solicitud de club sin la descripción
-        SolicitudClub.objects.create(
-            nombre=nombre,
-            categoria=categoria,
-            actividades=actividades
-        )
+        # Verificar si ya existe una solicitud con el mismo nombre
+        if SolicitudClub.objects.filter(nombre=nombre).exists():
+            mensaje = 'Ya se ha solicitado un club con este nombre.'
+        else:
+            # Crear una nueva solicitud de club
+            SolicitudClub.objects.create(
+                nombre=nombre,
+                categoria=categoria,
+                actividades=actividades
+            )
+            mensaje = 'La solicitud del club se ha enviado correctamente.'
     
-    return render(request, 'solicitarClub.html')
-
+    return render(request, 'solicitarClub.html', {'mensaje': mensaje})
 
 # Vista para mostrar las solicitudes pendientes de clubs
 @login_required
@@ -138,41 +150,41 @@ def rechazar_solicitud(request, solicitud_id):
 @login_required
 def implementar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudClub, id=solicitud_id)
+    mensaje = None  # Inicializamos el mensaje como None
     
     if request.method == 'POST':
-        # Recuperar los datos enviados por el formulario
         nombre = request.POST['nombre']
         descripcion = request.POST['descripcion']
         categoria = request.POST['categoria']
         imagen = request.FILES.get('imagen')
-
-        image_path = None  # Inicializamos por si no hay imagen
-
-        if imagen:
-            # Definimos el path para guardar la imagen en static
-            club_folder = f'static/images/portadasClub/{nombre}/'
-            os.makedirs(club_folder, exist_ok=True)  # Crea la carpeta si no existe
-            
-            # Guardamos la imagen en la carpeta del club
-            fs = FileSystemStorage(location=club_folder)
-            filename = fs.save(imagen.name, imagen)
-            image_path = os.path.join(club_folder, filename)
-
-        # Crear el club con los datos actualizados del formulario
-        Club.objects.create(
-            nombre=nombre,
-            descripcion=descripcion,
-            categoria=categoria,
-            imagen=image_path
-        )
         
-        # Cambiar el estado de la solicitud
-        solicitud.estatus = 'aprobado'
-        solicitud.save()
-        return redirect('solicitudes')
-    
-    return render(request, 'implementarClub.html', {'solicitud': solicitud})
+        # Verificar si ya existe un club con el mismo nombre
+        if Club.objects.filter(nombre=nombre).exists():
+            mensaje = 'Ya existe un club con este nombre.'
+        else:
+            image_path = None
 
+            if imagen:
+                club_folder = f'static/images/portadasClub/{nombre}/'
+                os.makedirs(club_folder, exist_ok=True)
+                fs = FileSystemStorage(location=club_folder)
+                filename = fs.save(imagen.name, imagen)
+                image_path = os.path.join(club_folder, filename)
+
+            # Crear el club
+            Club.objects.create(
+                nombre=nombre,
+                descripcion=descripcion,
+                categoria=categoria,
+                imagen=image_path
+            )
+
+            # Cambiar el estado de la solicitud
+            solicitud.estatus = 'aprobado'
+            solicitud.save()
+            mensaje = 'El club se ha implementado correctamente.'
+    
+    return render(request, 'implementarClub.html', {'solicitud': solicitud, 'mensaje': mensaje})
 
 # Vista para mostrar los clubes agrupados por categoría
 def clubes(request):
@@ -194,17 +206,27 @@ def clubes(request):
     return render(request, 'clubes.html', {'clubes': categorias, 'busqueda': busqueda})
 
 
-from eventos.models import EventoAsistido
+from eventos.models import Asistencia
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
 
-@login_required
 def asistir_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
+    
+    # Verificar si el usuario ya está registrado para este evento
+    ya_asistido = Asistencia.objects.filter(usuario_id=request.user, club_id=evento).exists()
+    
+    if ya_asistido:
+        # Opcional: Enviar un mensaje al usuario indicando que ya está registrado
+        messages.info(request, "Ya estás inscrito en este evento.")
+    else:
+        # Crear un registro en la tabla de eventos asistidos
+        Asistencia.objects.create(
+            usuario_id=request.user,
+            club_id=evento
+        )
+        # Opcional: Enviar un mensaje indicando que la inscripción fue exitosa
+        messages.success(request, "Te has inscrito con éxito al evento.")
 
-    # Crear un registro en la tabla de eventos asistidos
-    EventoAsistido.objects.create(
-        nombre=evento.titulo,
-        descripcion=evento.descripcion,
-        fecha=evento.fecha,
-        imagen=evento.imagenes.first().imagen.url if evento.imagenes.exists() else None,
-    )
+    # Redirigir al detalle del club
     return redirect('detalle_club', nombre=evento.club.nombre)

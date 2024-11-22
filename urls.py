@@ -16,4 +16,5 @@ urlpatterns = [
     path('<str:nombre>/agregar_evento/', views.agregar_evento, name='agregar_evento'),
     path('solicitar_club', views.solicitar_club, name='solicitar_club'),
     path('asistir-evento/<int:evento_id>/', views.asistir_evento, name='asistir_evento'),
+    path('club/<str:nombre>/salir/', views.salir_club, name='salir_club'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -5,6 +5,24 @@
 
 {% block estilosExtra %}
 <link rel="stylesheet" href="{% static 'css/detallesClub.css' %}">
+<style>
+    .btn-salir {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-salir:hover {
+    background-color: #cc0000;
+}
+
+</style>
 {% endblock %}
 
 {% block contenidoPrincipal %}
@@ -18,7 +36,9 @@
         <a href="{% url 'unirse_club' nombre=club.nombre %}" class="btn-unirse">Unirse al club</a>
     {% else %}
         <p class="miembro-estado">Ya eres miembro de este club.</p>
+        <a href="{% url 'salir_club' nombre=club.nombre %}" class="btn-salir">Salir del club</a>
     {% endif %}
+
 
 
 
