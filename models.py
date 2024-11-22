@@ -1,10 +1,11 @@
 from django.db import models
+from django.conf import settings
+from clubes.models import Evento 
 
-class EventoAsistido(models.Model):
-    nombre = models.CharField(max_length=200)
-    descripcion = models.TextField()
-    fecha = models.DateField()
-    imagen = models.ImageField(upload_to='static/images/eventos_asistidos/', blank=True, null=True)
+class Asistencia(models.Model):
+    id = models.AutoField(primary_key=True)
+    club_id = models.ForeignKey(Evento, on_delete=models.CASCADE, related_name='eventos')
+    usuario_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='eventos')
 
     def __str__(self):
-        return self.nombre
+        return f"Evento {self.id} - Club: {self.club.nombre} - Usuario: {self.usuario.username}"

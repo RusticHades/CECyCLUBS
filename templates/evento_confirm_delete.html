@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block content %}
+<h2>¿Estás seguro de que quieres dejar de asistir al evento?</h2>
+<p><strong>{{ object.nombre }}</strong> - {{ object.fecha }}</p>
+<p>{{ object.descripcion }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar Eliminación</button>
+</form>
+<a href="{% url 'eventos' %}">Cancelar</a>
+{% endblock %}
