@@ -5,7 +5,7 @@
 <main class="detalle-club">
     <section class="club-info">
         <h1>{{ club.nombre }}</h1>
-        <img src="/{{ club.imagen.url }}" alt="Imagen del Club" class="imagen-club">
+        <img src="/{{ club.imagen }}" alt="Imagen del Club" class="imagen-club">
         <p><strong>Descripción:</strong> {{ club.descripcion }}</p>
         <p><strong>Categoría:</strong> {{ club.categoria }}</p>
     </section>
@@ -18,7 +18,6 @@
                 <tr>
                     <th>Título</th>
                     <th>Contenido</th>
-                    <th>Fecha de Creación</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -27,7 +26,6 @@
                 <tr>
                     <td>{{ publicacion.titulo }}</td>
                     <td>{{ publicacion.contenido }}</td>
-                    <td>{{ publicacion.fecha_creacion }}</td>
                     <td>
                         <form method="POST" onsubmit="return confirm('¿Eliminar esta publicación?');">
                             {% csrf_token %}
@@ -78,4 +76,108 @@
         {% endif %}
     </section>
 </main>
+
+<style>
+
+:root {
+        --color-principal: #ff5733;
+        --color-secundario: #ffc300;
+        --color-parrafo: #ffffff;
+        --color-fondo: #f8f8f8;
+        --color-parrafoNormal: #333;
+        --color-error: #e63946;
+    }
+    
+    .detalle-club {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-fondo);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 1200px;
+    margin: 0 auto; /* Centra el contenido */
+}
+
+.club-info {
+    background-color: var(--color-principal);
+    color: var(--color-parrafo);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.club-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.club-info img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.club-info p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+    text-align: justify; /* Alinea el texto */
+    line-height: 1.6; /* Mejora la legibilidad */
+    font-style: italic; /* Dale un estilo más suave a la descripción */
+}
+
+.club-publicaciones, .club-eventos {
+    margin-top: 30px;
+}
+
+.club-publicaciones h2, .club-eventos h2 {
+    font-size: 2rem;
+    color: var(--color-principal);
+    margin-bottom: 15px;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.tabla th, .tabla td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla th {
+    background-color: var(--color-principal);
+    color: var(--color-parrafo);
+}
+
+.tabla td {
+    background-color: #ffffff;
+    color: var(--color-parrafoNormal);
+}
+
+.tabla tr:hover {
+    background-color: #f1f1f1;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-peligro {
+    background-color: var(--color-error);
+    color: var(--color-parrafo);
+}
+
+.btn-peligro:hover {
+    background-color: darkred;
+}
+
+</style>
 {% endblock %}
