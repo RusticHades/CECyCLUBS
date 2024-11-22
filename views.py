@@ -13,7 +13,7 @@ def detalles_club(request, nombre):
     eventos = Evento.objects.filter(club=club)
     
     # Obtén los miembros del club
-    miembros = club.miembros.all()  # Aquí estás obteniendo los miembros
+    miembros = club.miembros.all()
 
     # Verificar si el usuario es miembro del club
     es_miembro = request.user in club.miembros.all()
@@ -29,8 +29,8 @@ def detalles_club(request, nombre):
         'club': club,
         'publicaciones': publicaciones,
         'eventos': eventos,
-        'miembros': miembros,  # Los miembros se pasan al template
-        'es_miembro': es_miembro,  # Verifica si el usuario es miembro
+        'miembros': miembros,
+        'es_miembro': es_miembro,
     })
 
 
@@ -51,12 +51,13 @@ def agregar_noticia(request, nombre):
         publicacion_folder = f'static/images/publicaciones/{club.nombre}/'
         os.makedirs(publicacion_folder, exist_ok=True)  # Crear la carpeta si no existe
 
-        # Guardar las imágenes de la publicación
-        for imagen in imagenes:
-            fs = FileSystemStorage(location=publicacion_folder)
-            filename = fs.save(imagen.name, imagen)
-            image_path = os.path.join(publicacion_folder, filename)
-            ImagenPublicacion.objects.create(publicacion=publicacion, imagen=image_path)
+        # Guardar las imágenes si existen
+        if imagenes:
+            for imagen in imagenes:
+                fs = FileSystemStorage(location=publicacion_folder)
+                filename = fs.save(imagen.name, imagen)
+                image_path = os.path.join(publicacion_folder, filename)
+                ImagenPublicacion.objects.create(publicacion=publicacion, imagen=image_path)
 
         return redirect('detalle_club', nombre=club.nombre)
 
@@ -80,12 +81,13 @@ def agregar_evento(request, nombre):
         evento_folder = f'static/images/eventos/{club.nombre}/'
         os.makedirs(evento_folder, exist_ok=True)  # Crear la carpeta si no existe
 
-        # Guardar las imágenes del evento
-        for imagen in imagenes:
-            fs = FileSystemStorage(location=evento_folder)
-            filename = fs.save(imagen.name, imagen)
-            image_path = os.path.join(evento_folder, filename)
-            ImagenEvento.objects.create(evento=evento, imagen=image_path)
+        # Guardar las imágenes si existen
+        if imagenes:
+            for imagen in imagenes:
+                fs = FileSystemStorage(location=evento_folder)
+                filename = fs.save(imagen.name, imagen)
+                image_path = os.path.join(evento_folder, filename)
+                ImagenEvento.objects.create(evento=evento, imagen=image_path)
 
         return redirect('detalle_club', nombre=club.nombre)
 

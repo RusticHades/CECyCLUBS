@@ -15,10 +15,10 @@
         <p>{{ club.descripcion }}</p>
     </div>
     {% if not es_miembro %}
-    <a href="{% url 'unirse_club' nombre=club.nombre %}" style="color: black;">Unirse al club</a>
-{% else %}
-    <p>Ya eres miembro de este club.</p>
-{% endif %}
+        <a href="{% url 'unirse_club' nombre=club.nombre %}" class="btn-unirse">Unirse al club</a>
+    {% else %}
+        <p class="miembro-estado">Ya eres miembro de este club.</p>
+    {% endif %}
 
 
 
@@ -32,11 +32,12 @@
     <div id="noticias" class="contenido-seccion active">
         <h2>Publicaciones del Club</h2>
         {% if user.rol == 'administrador' %}
-        <div class="botones-agregar">
-            <a href="{% url 'agregar_noticia' club.nombre %}" style="color: black;">Agregar Noticia</a>
-            <a href="{% url 'agregar_evento' club.nombre %}" style="color: black;">Agregar Evento</a>
-        </div>
+            <div class="botones-agregar">
+                <a href="{% url 'agregar_noticia' club.nombre %}" class="btn-agregar">Agregar Noticia</a>
+                <a href="{% url 'agregar_evento' club.nombre %}" class="btn-agregar">Agregar Evento</a>
+            </div>
         {% endif %}
+        <h3>Noticias</h3>
 
         <div class="lista-publicaciones">
             {% for publicacion in publicaciones %}
@@ -50,22 +51,23 @@
                     </div>
                 </div>
             {% endfor %}
-
-            <div class="lista-eventos">
-                {% for evento in eventos %}
-                    <div class="evento publicacion">
-                        <h3>{{ evento.nombre }}</h3>
-                        <p>{{ evento.descripcion }}</p>
-                        <div class="imagenes-evento imagenes-publicacion">
-                            {% for img in evento.imagenes.all %}
-                                <img src="{{ img.imagen.url }}" alt="Imagen de evento" class="evento-img">
-                            {% endfor %}
-                        </div>
-                        <a href="{% url 'asistir_evento' evento.id %}" class="boton-asistir" style="color: black;">Asistir al Evento</a>
-                    </div>
-                {% endfor %}
-            </div>
         </div>
+        <h3>Eventos</h3>
+
+        <div class="lista-eventos">
+            {% for evento in eventos %}
+                <div class="evento publicacion">
+                    <h3>{{ evento.titulo }}</h3>
+                    <p>{{ evento.descripcion }}</p>
+                    <div class="imagenes-evento imagenes-publicacion">
+                        {% for img in evento.imagenes.all %}
+                            <img src="{{ img.imagen.url }}" alt="Imagen de evento" class="evento-img">
+                        {% endfor %}
+                        </div>
+                    <a href="{% url 'asistir_evento' evento.id %}" class="boton-asistir">Asistir al Evento</a>
+                </div>
+            {% endfor %}
+            </div>
     </div>
 
     <div id="miembros" class="contenido-seccion" style="display: none;">
