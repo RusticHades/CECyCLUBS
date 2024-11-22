@@ -1,0 +1,164 @@
+:root {
+    --color-principal: #ff5733;
+    --color-secundario: #ffc300;
+    --color-parrafo: #ffffff;
+    --color-fondo: #f8f8f8;
+    --color-parrafoNormal: #333;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: var(--color-fondo);
+}
+
+.formulario-contenido {
+    background: var(--color-parrafo);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+h2 {
+    color: var(--color-principal);
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.grupo-formulario {
+    position: relative;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grupo-formulario label {
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.grupo-formulario input,
+.grupo-formulario textarea,
+.grupo-formulario select {
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    background: transparent;
+    color: var(--color-parrafoNormal);
+    transition: border-color 0.3s;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.grupo-formulario input:focus,
+.grupo-formulario textarea:focus,
+.grupo-formulario select:focus {
+    border-color: var(--color-principal);
+}
+
+.grupo-formulario span {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #aaa;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.grupo-formulario input:focus ~ span,
+.grupo-formulario input:valid ~ span,
+.grupo-formulario textarea:focus ~ span,
+.grupo-formulario textarea:valid ~ span {
+    top: 0;
+    transform: translateY(-50%) scale(0.9);
+    color: var(--color-principal);
+    background: var(--color-parrafo);
+    padding: 0 5px;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 90%;
+    max-width: 500px;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-principal);
+    color: var(--color-parrafo);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 20px;
+    margin: 0 auto;
+}
+
+button[type="submit"]:hover {
+    background: darkorange;
+}
+
+button[type="submit"]:active {
+    background: #e64a19;
+}
+
+select {
+    background: var(--color-fondo);
+    font-size: 16px;
+    padding: 15px;
+    color: var(--color-parrafoNormal);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+select:focus {
+    border-color: var(--color-principal);
+}
+
+/* Estilo para el label del input file */
+.btn-seleccionar-imagen {
+    display: inline-block;
+    padding: 14px;
+    background-color: var(--color-secundario);
+    color: var(--color-parrafo);
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.btn-seleccionar-imagen input {
+    display: none;
+}
+
+.imagen-preview {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imagen-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
