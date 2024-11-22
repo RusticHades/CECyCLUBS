@@ -1,5 +1,3 @@
-from django.db import models
-
 # Modelo de Club
 from django.conf import settings
 from django.db import models
@@ -13,7 +11,6 @@ class Club(models.Model):
 
     def __str__(self):
         return self.nombre
-
 
 # Modelo de Evento
 class Evento(models.Model):

@@ -4,7 +4,7 @@
 {% block title %}Solicitar Club{% endblock %}
 
 {% block estilosExtra %}
-<link rel="stylesheet" href="{% static 'css/solicitarClub.css' %}">
+<link rel="stylesheet" href="{% static 'css/formularioGeneral.css' %}">
 {% endblock %}
 
 {% block contenidoPrincipal %}
@@ -19,7 +19,7 @@
                     <span>Nombre del club</span>
                 </label>
             </div>
-            <!-- Se ha eliminado la parte de la descripción -->
+
             <div class="grupo-formulario">
                 <label for="categoria">
                     <select id="categoria" name="categoria" required>
@@ -33,6 +33,7 @@
                     </select>
                 </label>
             </div>
+            
             <div class="grupo-formulario">
                 <label for="actividades">
                     <textarea id="actividades" name="actividades" rows="4" required></textarea>

@@ -3,33 +3,72 @@
 
 {% block title %}Agregar Evento - {{ club.nombre }}{% endblock %}
 
+{% block estilosExtra %}
+<link rel="stylesheet" href="{% static 'css/formularioGeneral.css' %}">
+{% endblock %}
+
 {% block contenidoPrincipal %}
-<main class="agregar-evento">
-    <h1>Agregar Evento al Club: {{ club.nombre }}</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div>
-            <label for="titulo">Título del Evento:</label>
-            <input type="text" id="titulo" name="titulo" required>
-        </div>
-        
-        <div>
-            <label for="descripcion">Descripción del Evento:</label>
-            <textarea id="descripcion" name="descripcion" rows="5" required></textarea>
-        </div>
-        
-        <div>
-            <label for="fecha">Fecha del Evento:</label>
-            <input type="datetime-local" id="fecha" name="fecha" required>
-        </div>
-
-        <div>
-            <label for="imagenes">Imágenes del Evento:</label>
-            <input type="file" name="imagenes" accept="image/*" >
-        </div>
-
-        <button type="submit" class="boton">Agregar Evento</button>
-    </form>
-    <a href="{% url 'detalle_club' club.nombre %}" class="boton regresar">Regresar a detalles del club</a>
+<main class="formulario-main">
+    <div class="formulario-contenido">
+        <h2>Agregar Evento al Club: {{ club.nombre }}</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="grupo-formulario">
+                <label for="titulo">
+                    <input type="text" id="titulo" name="titulo" required>
+                    <span>Título del Evento</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="descripcion">
+                    <textarea id="descripcion" name="descripcion" rows="5" required></textarea>
+                    <span>Descripción del Evento</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="fecha">
+                    <input type="datetime-local" id="fecha" name="fecha" required>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="imagenes" class="btn-seleccionar-imagen">
+                    Seleccionar Imagen
+                    <input type="file" id="imagenes" name="imagenes" accept="image/*" onchange="previewImage(event)">
+                </label>
+                <div id="imagen-preview" class="imagen-preview">
+                    <!-- Previsualización de la imagen seleccionada aquí -->
+                </div>
+            </div>
+            
+            <button type="submit">Agregar Evento</button>
+        </form>
+        <a href="{% url 'detalle_club' club.nombre %}" class="boton regresar">Regresar a detalles del club</a>
+    </div>
 </main>
+
+<script>
+    function previewImage(event) {
+        const fileInput = event.target;
+        const previewContainer = document.getElementById('imagen-preview');
+
+        // Limpiar la previsualización
+        previewContainer.innerHTML = '';
+
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Crear una imagen y agregarla al contenedor de previsualización
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 {% endblock %}
