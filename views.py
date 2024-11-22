@@ -136,7 +136,6 @@ def rechazar_solicitud(request, solicitud_id):
 
 # Vista para aprobar una solicitud e implementarla como club
 @login_required
-@login_required
 def implementar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudClub, id=solicitud_id)
     
