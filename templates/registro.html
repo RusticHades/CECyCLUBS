@@ -3,11 +3,15 @@
 
 {% block title %}Registro de Usuario{% endblock %}
 
+{% block estilosExtra %}
+<link rel="stylesheet" href="{% static 'css/formularioGeneral.css' %}">
+{% endblock %}
+
 {% block contenidoPrincipal %}
 <main>
     <div class="formulario-contenido">
         <h2>Registro de Usuario</h2>
-        <form method="post" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             
             <div class="grupo-formulario">
@@ -39,11 +43,13 @@
             </div>            
             
             <div class="grupo-formulario">
-                <label for="inputFile">
+                <label for="inputFile" class="btn-seleccionar-imagen">
                     Foto de Perfil (opcional)
-                    <input type="file" id="inputFile" name="foto_perfil" accept="image/*">
-                    <img id="foto_File" alt="">
+                    <input type="file" id="inputFile" name="foto_perfil" accept="image/*" onchange="previewImage(event)">
                 </label>
+                <div id="imagen-preview" class="imagen-preview">
+                    <!-- Previsualización de la imagen seleccionada aquí -->
+                </div>
             </div>
             
             <button type="submit">Registrarse</button>
@@ -51,152 +57,28 @@
     </div>
 </main>
 
-<style>
-:root {
-    --color-principal: #ff5733;
-    --color-secundario: #ffc300;
-    --color-parrafo: #ffffff;
-    --color-fondo: #f8f8f8;
-    --color-parrafoNormal: #333;
-    --color-error: #e63946;
-}
-
-body {
-    background: var(--color-fondo);
-    font-family: 'Rubik', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    background: var(--color-fondo);
-}
-
-.formulario-contenido {
-    background: var(--color-parrafo);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-h2 {
-    color: var(--color-principal);
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.grupo-formulario {
-    position: relative;
-    margin-bottom: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.grupo-formulario label, select {
-    width: 100%;
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    position: relative;
-}
-
-.grupo-formulario input[type="file"] {
-    display: none;
-}
-
-.grupo-formulario img{
-    padding: 2vw;
-    max-width: 12vw;
-    margin: auto;
-}
-
-.grupo-formulario input:not([type="file"]),
-.grupo-formulario select {
-    padding: 15px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    background: transparent;
-    color: var(--color-parrafoNormal);
-    transition: border-color 0.3s;
-    width: 100%;
-}
-
-.grupo-formulario input:focus,
-.grupo-formulario select:focus {
-    border-color: var(--color-principal);
-}
-
-.grupo-formulario span {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: #aaa;
-    pointer-events: none;
-    transition: 0.3s;
-}
-
-.grupo-formulario input:focus ~ span,
-.grupo-formulario select:focus ~ span,
-.grupo-formulario input:valid ~ span,
-.grupo-formulario select:valid ~ span {
-    top: 0;
-    transform: translateY(-50%) scale(0.9);
-    color: var(--color-principal);
-    background: var(--color-parrafo);
-    padding: 0 5px;
-}
-
-button[type="submit"] {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    background: var(--color-principal);
-    color: var(--color-parrafo);
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin-top: 20px;
-}
-
-button[type="submit"]:hover {
-    background: darkorange;
-}
-
-button[type="submit"]:active {
-    background: #e64a19;
-}
-</style>
-
+{% block scriptsExtra %}
 <script>
-    document.getElementById('inputFile').addEventListener('change', ()=>{
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('foto_File').setAttribute('src', e.target.result)
-        }
+    function previewImage(event) {
+        const fileInput = event.target;
+        const previewContainer = document.getElementById('imagen-preview');
 
-        let file = document.getElementById('inputFile').files[0];
+        // Limpiar la previsualización
+        previewContainer.innerHTML = '';
+
+        const file = fileInput.files[0];
         if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Crear una imagen y agregarla al contenedor de previsualización
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            }
             reader.readAsDataURL(file);
         }
-    })
+    }
 </script>
+{% endblock %}
+
 {% endblock %}

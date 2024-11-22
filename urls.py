@@ -19,4 +19,5 @@ urlpatterns = [
     path('eliminar-club/<int:club_id>/', views.eliminar_club, name='eliminar_club'),
     path('usuario/<int:usuario_id>/', views.ver_usuario, name='ver_usuario'),
     path('expulsar_de_club/<int:club_id>/<int:usuario_id>/', views.expulsar_de_club, name='expulsar_de_club'),
+    path('club/<int:club_id>/', views.ver_club, name='ver_club'),
 ]

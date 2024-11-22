@@ -6,7 +6,35 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.storage import FileSystemStorage
 from .models import Usuario
-from clubes.models import Club
+from clubes.models import Club, Publicacion, Evento
+
+@login_required
+def ver_club(request, club_id):
+    club = get_object_or_404(Club, id=club_id)
+    publicaciones = club.publicaciones.all()
+    eventos = club.eventos.all()
+
+    if request.method == 'POST':
+        if 'eliminar_publicacion' in request.POST:
+            publicacion_id = request.POST.get('publicacion_id')
+            publicacion = get_object_or_404(Publicacion, id=publicacion_id)
+            publicacion.delete()
+            messages.success(request, "Publicación eliminada exitosamente.")
+            return redirect('configuracion:ver_club', club_id=club.id)
+        
+        if 'eliminar_evento' in request.POST:
+            evento_id = request.POST.get('evento_id')
+            evento = get_object_or_404(Evento, id=evento_id)
+            evento.delete()
+            messages.success(request, "Evento eliminado exitosamente.")
+            return redirect('configuracion:ver_club', club_id=club.id)
+
+    return render(request, 'verClub.html', {
+        'club': club,
+        'publicaciones': publicaciones,
+        'eventos': eventos,
+    })
+
 
 @login_required
 def ver_usuario(request, usuario_id):

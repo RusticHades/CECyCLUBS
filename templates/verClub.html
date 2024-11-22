@@ -1,0 +1,81 @@
+{% extends 'estiloGeneral.html' %}
+{% block title %}Detalles del Club{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="detalle-club">
+    <section class="club-info">
+        <h1>{{ club.nombre }}</h1>
+        <img src="/{{ club.imagen.url }}" alt="Imagen del Club" class="imagen-club">
+        <p><strong>Descripción:</strong> {{ club.descripcion }}</p>
+        <p><strong>Categoría:</strong> {{ club.categoria }}</p>
+    </section>
+
+    <section class="club-publicaciones">
+        <h2>Publicaciones</h2>
+        {% if publicaciones %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Contenido</th>
+                    <th>Fecha de Creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for publicacion in publicaciones %}
+                <tr>
+                    <td>{{ publicacion.titulo }}</td>
+                    <td>{{ publicacion.contenido }}</td>
+                    <td>{{ publicacion.fecha_creacion }}</td>
+                    <td>
+                        <form method="POST" onsubmit="return confirm('¿Eliminar esta publicación?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="publicacion_id" value="{{ publicacion.id }}">
+                            <button type="submit" name="eliminar_publicacion" class="btn btn-peligro">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No hay publicaciones disponibles para este club.</p>
+        {% endif %}
+    </section>
+
+    <section class="club-eventos">
+        <h2>Eventos</h2>
+        {% if eventos %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evento in eventos %}
+                <tr>
+                    <td>{{ evento.titulo }}</td>
+                    <td>{{ evento.descripcion }}</td>
+                    <td>{{ evento.fecha }}</td>
+                    <td>
+                        <form method="POST" onsubmit="return confirm('¿Eliminar este evento?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="evento_id" value="{{ evento.id }}">
+                            <button type="submit" name="eliminar_evento" class="btn btn-peligro">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No hay eventos disponibles para este club.</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

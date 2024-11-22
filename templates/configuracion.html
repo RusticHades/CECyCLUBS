@@ -104,6 +104,7 @@
                             <td>
                                 <div class="acciones-tabla">
                                     <a href="{% url 'configuracion:editar_club' club.id %}" class="btn">Editar</a>
+                                    <a href="{% url 'configuracion:ver_club' club.id %}" class="btn">Ver Detalles</a>
                                     <form method="POST" action="{% url 'configuracion:eliminar_club' club.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este club?');">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-peligro">Eliminar</button>

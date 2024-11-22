@@ -3,25 +3,73 @@
 
 {% block title %}Editar Club{% endblock %}
 
+{% block estilosExtra %}
+<link rel="stylesheet" href="{% static 'css/formularioGeneral.css' %}">
+{% endblock %}
+
 {% block contenidoPrincipal %}
-<main class="editar-club">
-    <h1>Editar Club</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" name="nombre" value="{{ club.nombre }}" required>
-        
-        <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" name="descripcion" required>{{ club.descripcion }}</textarea>
-        
-        <label for="categoria">Categoría</label>
-        <input type="text" id="categoria" name="categoria" value="{{ club.categoria }}" required>
-        
-        <label for="imagen">Imagen</label>
-        <input type="file" id="imagen" name="imagen">
-        
-        <button type="submit" class="btn">Guardar Cambios</button>
+<main class="formulario-main">
+    <div class="formulario-contenido">
+        <h2>Editar Club</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="grupo-formulario">
+                <label for="nombre">
+                    <input type="text" id="nombre" name="nombre" value="{{ club.nombre }}" required>
+                    <span>Nombre del Club</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="descripcion">
+                    <textarea id="descripcion" name="descripcion" required>{{ club.descripcion }}</textarea>
+                    <span>Descripción del Club</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="categoria">
+                    <input type="text" id="categoria" name="categoria" value="{{ club.categoria }}" required>
+                    <span>Categoría del Club</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="imagen" class="btn-seleccionar-imagen">
+                    Seleccionar Imagen
+                    <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previewImage(event)">
+                </label>
+                <div id="imagen-preview" class="imagen-preview">
+                    <!-- Previsualización de la imagen seleccionada aquí -->
+                </div>
+            </div>
+            
+            <button type="submit">Guardar Cambios</button>
+        </form>
         <a href="{% url 'configuracion:buscar_club' %}" class="btn btn-peligro">Cancelar</a>
-    </form>
+    </div>
 </main>
+
+<script>
+    function previewImage(event) {
+        const fileInput = event.target;
+        const previewContainer = document.getElementById('imagen-preview');
+
+        // Limpiar la previsualización
+        previewContainer.innerHTML = '';
+
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Crear una imagen y agregarla al contenedor de previsualización
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 {% endblock %}
