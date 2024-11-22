@@ -203,3 +203,16 @@ footer h3 {
         justify-content: flex-start;
     }
 }
+
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Asegúrate de que esté encima de otros elementos */
+}
+
+body {
+    padding-top: 76.8px; /* Ajusta el contenido para que no quede oculto detrás del header */
+}
