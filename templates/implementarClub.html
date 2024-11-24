@@ -91,4 +91,11 @@
     // Agregar un listener al formulario para validar antes de enviar
     document.querySelector('form').addEventListener('submit', validateForm);
 </script>
+
+{% if mensaje %}
+    <script type="text/javascript">
+        alert("{{ mensaje }}");
+    </script>
+{% endif %}
+
 {% endblock %}

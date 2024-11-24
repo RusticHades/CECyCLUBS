@@ -67,6 +67,7 @@ class SolicitudClub(models.Model):
         default='pendiente'
     )
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
+    correo = models.EmailField()  # Añadimos el campo correo
 
     def __str__(self):
         return self.nombre

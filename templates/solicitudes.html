@@ -66,9 +66,51 @@
     .solicitud-acciones a {
         color: #333;
     }
-</style>
+
+    .filtros {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .filtro-btn {
+        background-color: var(--color-secundario);
+        color: var(--color-parrafo);
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+        font-weight: bold;
+    }
+
+    .filtro-btn:hover {
+        background-color: var(--color-principal);
+    }
+
+    .btn-informar, .btn-rechazar, .btn-implementar {
+        background-color: var(--color-principal);
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    </style>
+
     <main>
         <h1>Solicitudes de Clubes</h1>
+
+        <!-- Filtros -->
+        <div class="filtros">
+            <a href="{% url 'solicitudes' %}?estado=pendiente" class="filtro-btn {% if estado == 'pendiente' %}active{% endif %}">Pendiente</a>
+            <a href="{% url 'solicitudes' %}?estado=aprobado" class="filtro-btn {% if estado == 'aprobado' %}active{% endif %}">Aprobado</a>
+            <a href="{% url 'solicitudes' %}?estado=rechazado" class="filtro-btn {% if estado == 'rechazado' %}active{% endif %}">Rechazado</a>
+        </div>
+
         <div class="solicitudes-container">
             {% for solicitud in solicitudes %}
                 <div class="solicitud-card">
@@ -76,8 +118,18 @@
                     <p class="solicitud-categoria">{{ solicitud.categoria }}</p>
                     <p class="solicitud-actividades"><strong>Actividades:</strong> {{ solicitud.actividades }}</p>
                     <div class="solicitud-acciones">
-                        <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn-rechazar">Rechazar</a>
+                        
+                        <!-- Botones según el estado -->
+                        {% if solicitud.estatus == 'pendiente' %}
+                            <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn-rechazar">Rechazar</a>
+                            <a href="{% url 'implementar_solicitud' solicitud.id %}" class="btn-implementar">Implementar</a>
+                        {% elif solicitud.estatus == 'aprobado' %}
+                            <a href="{% url 'rechazar_solicitud' solicitud.id %}" class="btn-rechazar">Rechazar</a>
+                        {% elif solicitud.estatus == 'rechazado' %}
                         <a href="{% url 'implementar_solicitud' solicitud.id %}" class="btn-implementar">Implementar</a>
+                        {% endif %}
+                        
+                        <a href="mailto:{{ solicitud.correo }}" class="btn-informar">Informar</a>
                     </div>
                 </div>
             {% empty %}
@@ -86,3 +138,4 @@
         </div>    
     </main>
 {% endblock %}
+x

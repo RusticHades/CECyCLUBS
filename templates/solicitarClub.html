@@ -44,4 +44,11 @@
         </form>
     </div>
 </main>
+
+{% if mensaje %}
+    <script type="text/javascript">
+        alert("{{ mensaje }}");
+    </script>
+{% endif %}
+
 {% endblock %}

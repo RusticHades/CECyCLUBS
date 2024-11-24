@@ -110,6 +110,9 @@ def salir_club(request, nombre):
     return redirect('detalle_club', nombre=club.nombre)
 
 # Vista para mostrar el formulario de solicitud
+from django.contrib.auth.decorators import login_required
+from .models import SolicitudClub
+
 @login_required
 def solicitar_club(request):
     mensaje = None
@@ -120,13 +123,15 @@ def solicitar_club(request):
         
         # Verificar si ya existe una solicitud con el mismo nombre
         if SolicitudClub.objects.filter(nombre=nombre).exists():
+            # Si ya existe una solicitud, renderizamos la plantilla con un mensaje
             mensaje = 'Ya se ha solicitado un club con este nombre.'
         else:
             # Crear una nueva solicitud de club
             SolicitudClub.objects.create(
                 nombre=nombre,
                 categoria=categoria,
-                actividades=actividades
+                actividades=actividades,
+                correo=request.user.email  # Asignamos el correo del usuario logueado
             )
             mensaje = 'La solicitud del club se ha enviado correctamente.'
     
@@ -135,8 +140,10 @@ def solicitar_club(request):
 # Vista para mostrar las solicitudes pendientes de clubs
 @login_required
 def solicitudes(request):
-    solicitudes = SolicitudClub.objects.filter(estatus='pendiente')
-    return render(request, 'solicitudes.html', {'solicitudes': solicitudes})
+    estado = request.GET.get('estado', 'pendiente')  # 'pendiente' es el valor por defecto
+    solicitudes = SolicitudClub.objects.filter(estatus=estado)
+    return render(request, 'solicitudes.html', {'solicitudes': solicitudes, 'estado': estado})
+
 
 # Vista para rechazar una solicitud de club
 @login_required
@@ -160,6 +167,7 @@ def implementar_solicitud(request, solicitud_id):
         
         # Verificar si ya existe un club con el mismo nombre
         if Club.objects.filter(nombre=nombre).exists():
+            # Si ya existe un club con ese nombre, renderizar con un mensaje
             mensaje = 'Ya existe un club con este nombre.'
         else:
             image_path = None
@@ -186,6 +194,7 @@ def implementar_solicitud(request, solicitud_id):
     
     return render(request, 'implementarClub.html', {'solicitud': solicitud, 'mensaje': mensaje})
 
+
 # Vista para mostrar los clubes agrupados por categoría
 def clubes(request):
     clubes = Club.objects.all()
@@ -207,7 +216,6 @@ def clubes(request):
 
 
 from eventos.models import Asistencia
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 
 def asistir_evento(request, evento_id):
