@@ -1,4 +1,5 @@
 {% extends 'estiloGeneral.html' %}
+
 {% block title %}Calendario de Eventos{% endblock %}
 
 {% block contenidoPrincipal %}
@@ -10,7 +11,7 @@
                 {% if evento.imagen %}
                     <img src="{{ evento.imagen }}" alt="{{ evento.nombre }}" class="evento-img">
                 {% endif %}
-                <div class="presentar">
+                <div class="evento-info">
                     <h2>{{ evento.titulo }}</h2>
                     <p>{{ evento.descripcion }}</p>
                     <p><strong>Fecha:</strong> {{ evento.fecha }}</p>
@@ -18,12 +19,13 @@
                     <!-- Verificar si el evento tiene una asistencia asociada al usuario -->
                     {% for asistencia in asistencias %}
                         {% if asistencia.club_id == evento %}
-                            <!-- Mostrar el enlace de eliminación solo si el usuario está asistiendo -->
-                            <a href="{% url 'eliminarAsistencia' asistencia.pk %}">Ya no asistiré</a>
+                            <a href="{% url 'eliminarAsistencia' asistencia.pk %}" class="btn-cancelar">Ya no asistiré</a>
                         {% endif %}
                     {% endfor %}
                 </div>
             </div>
+        {% empty %}
+            <p class="no-eventos">No hay eventos programados en este momento.</p>
         {% endfor %}
     </div>
 </main>
@@ -35,49 +37,95 @@
         --color-parrafo: #ffffff;
         --color-fondo: #f8f8f8;
         --color-parrafoNormal: #333;
+        --color-hover: #ff7043;
+        --color-borde: #ff5722;
     }
 
-    .evento-item{
+    main {
+        min-height: 90vh;
+        background-color: var(--color-fondo);
+        padding: 2rem;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: var(--color-principal);
+    }
+
+    .eventos-lista {
         display: flex;
-        margin: auto;
-        flex-direction: row;
-        gap: 4vw;
-        padding: 2vw;
-        margin: 2vw;
-        border: solid var(--color-principal) 2px;
-        border-radius: 1vw;
-        box-sizing: border-box;
-        transition: all 1s;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
     }
 
-    .evento-item:hover{
-        scale: 1.02;
-        transition: all .5s;
-    }
-
-    .presentar{
+    .evento-item {
         display: flex;
         flex-direction: column;
+        justify-content: flex-start;
+        width: 300px;
+        padding: 20px;
+        border: 2px solid var(--color-borde);
+        border-radius: 10px;
+        background-color: var(--color-parrafo);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
     }
 
-    .presentar a{
-        background-color: var(--color-principal);
-        padding: 1vw;
-        border-radius: 1vw;
-        box-sizing: border-box;
-        transition: all 1s;
-        text-align: center;
+    .evento-item:hover {
+        transform: scale(1.05);
     }
 
-    .presentar a:hover{
-        background-color: var(--color-parrafoNormal);
+    .evento-info {
+        margin-top: 20px;
+    }
+
+    .evento-info h2 {
+        font-size: 1.5rem;
         color: var(--color-principal);
-        border: solid var(--color-principal) 2px;
-        transition: all .3s;
+        margin-bottom: 10px;
     }
 
-    .evento-item img{
-        max-width: 43vw;
+    .evento-info p {
+        font-size: 1rem;
+        color: var(--color-parrafoNormal);
+    }
+
+    .evento-info a {
+        margin-top: 15px;
+        display: inline-block;
+        background-color: var(--color-principal);
+        color: var(--color-parrafo);
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .evento-info a:hover {
+        background-color: var(--color-hover);
+        color: var(--color-parrafo);
+    }
+
+    .evento-img {
+        width: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+        max-height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .no-eventos {
+        font-size: 1.2rem;
+        color: var(--color-parrafoNormal);
+        text-align: center;
+        width: 100%;
+        margin-top: 50px;
+        font-weight: bold;
     }
 </style>
 {% endblock %}
