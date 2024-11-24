@@ -19,13 +19,42 @@
         @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
     </style>
 {% block estilosExtra %}
+
 {% endblock %}
 </head>
 <body>
+
+    
+<style>
+    .btn-iniciar-sesion {
+    background-color: white; /* Ajusta según tu paleta */
+    color: var(--color-principal);
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-iniciar-sesion:hover {
+    background-color: var(--color-secundario);
+    color: black; /* Color al pasar el mouse */
+}
+
+</style>
     <!-- Encabezado -->
     <header>
         <span class="logo">
-            <h1>CECyCLUB'S</h1>
+                <h1>CECyCLUB'S 
+                {% if request.user.is_authenticated %}
+                    {% if request.user.rol == 'administrador' %}
+                        - Administrador
+                    {% elif request.user.rol == 'usuario' %}
+                        - Usuario
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'configuracion:configuracion' %}" class="btn-iniciar-sesion">Iniciar sesión</a>
+                {% endif %}</h1>
         </span>
         <nav class="menu">
             <ul>
