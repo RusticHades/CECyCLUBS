@@ -1,0 +1,42 @@
+{% extends 'estiloGeneral.html' %}
+{% load static %}
+
+{% block title %}Editar Evento{% endblock %}
+
+{% block estilosExtra %}
+<link rel="stylesheet" href="{% static 'css/formularioGeneral.css' %}">
+{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="formulario-main">
+    <div class="formulario-contenido">
+        <h2>Editar Evento</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="grupo-formulario">
+                <label for="titulo">
+                    <input type="text" id="titulo" name="titulo" value="{{ evento.titulo }}" required>
+                    <span>Título del Evento</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="descripcion">
+                    <textarea id="descripcion" name="descripcion" required>{{ evento.descripcion }}</textarea>
+                    <span>Descripción del Evento</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="fecha">
+                    <input type="datetime-local" id="fecha" name="fecha" value="{{ evento.fecha|date:'Y-m-d\\TH:i' }}" required>
+                    <span>Fecha y Hora del Evento</span>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn">Guardar Cambios</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

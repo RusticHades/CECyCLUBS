@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.storage import FileSystemStorage
 from .models import Usuario
 from clubes.models import Club, Publicacion, Evento
+from django.core.mail import send_mail
+
 
 @login_required
 def ver_club(request, club_id):
@@ -21,19 +23,49 @@ def ver_club(request, club_id):
             publicacion.delete()
             messages.success(request, "Publicación eliminada exitosamente.")
             return redirect('configuracion:ver_club', club_id=club.id)
-        
+
         if 'eliminar_evento' in request.POST:
             evento_id = request.POST.get('evento_id')
             evento = get_object_or_404(Evento, id=evento_id)
             evento.delete()
             messages.success(request, "Evento eliminado exitosamente.")
             return redirect('configuracion:ver_club', club_id=club.id)
-
+    
     return render(request, 'verClub.html', {
         'club': club,
         'publicaciones': publicaciones,
         'eventos': eventos,
     })
+
+
+@login_required
+def editar_publicacion(request, publicacion_id):
+    publicacion = get_object_or_404(Publicacion, id=publicacion_id)
+
+    if request.method == 'POST':
+        publicacion.titulo = request.POST.get('titulo')
+        publicacion.contenido = request.POST.get('contenido')
+        publicacion.save()
+        messages.success(request, "Publicación actualizada exitosamente.")
+        return redirect('configuracion:ver_club', club_id=publicacion.club.id)
+
+    return render(request, 'editarPublicacion.html', {'publicacion': publicacion})
+
+
+@login_required
+def editar_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)
+
+    if request.method == 'POST':
+        evento.titulo = request.POST.get('titulo')
+        evento.descripcion = request.POST.get('descripcion')
+        evento.fecha = request.POST.get('fecha')
+        evento.save()
+        messages.success(request, "Evento actualizado exitosamente.")
+        return redirect('configuracion:ver_club', club_id=evento.club.id)
+
+    return render(request, 'editarEvento.html', {'evento': evento})
+
 
 
 @login_required
@@ -56,7 +88,28 @@ def expulsar_de_club(request, club_id, usuario_id):
     if usuario in club.miembros.all():
         club.miembros.remove(usuario)  # Elimina al usuario del club
 
+        # Enviar correo electrónico
+        asunto = "Expulsión del club"
+        mensaje = f"""
+        Hola {usuario.nombre_completo},
+
+        Te informamos que has sido expulsado del club {club.nombre}. 
+        Si tienes alguna duda, por favor contacta con un administrador.
+
+        Atentamente,
+        El equipo de gestión de CECyCLUBS.
+        """
+        remitente = 'cecyclubscuautitlanizcalli@gmail.com'
+        destinatarios = [usuario.email]
+
+        try:
+            send_mail(asunto, mensaje, remitente, destinatarios)
+            messages.success(request, "Usuario expulsado y notificado por correo.")
+        except Exception as e:
+            messages.error(request, f"No se pudo enviar el correo: {str(e)}")
+
     return redirect('configuracion:ver_usuario', usuario_id=usuario.id)
+
 
 @login_required
 def buscar_club(request):
@@ -98,14 +151,12 @@ def editar_club(request, club_id):
     
     return render(request, 'editarClub.html', {'club': club})
 
-
 @login_required
 def eliminar_club(request, club_id):
     club = get_object_or_404(Club, id=club_id)
     club.delete()
     messages.success(request, 'El club ha sido eliminado correctamente.')
     return redirect('configuracion:buscar_club')
-
 
 def registro_usuario(request):
     if request.method == 'POST':
@@ -114,6 +165,13 @@ def registro_usuario(request):
         password = request.POST['password']
         rol = 'usuario'  # Asignamos el rol por defecto
         foto_perfil = request.FILES.get('foto_perfil')
+
+        # Verificar si el email ya está registrado
+        if Usuario.objects.filter(email=email).exists():
+            # Si el email ya está registrado, renderizar la página con un alert en JS
+            return render(request, 'registro.html', {
+                'email_ya_registrado': True  # Indicamos que el email ya está registrado
+            })
 
         # Ruta base para guardar imágenes
         user_folder = f'static/images/fotosPerfil/{email}/'
@@ -156,15 +214,10 @@ def inicio_sesion(request):
 
     return render(request, 'iniciarSesion.html')
 
-
 @login_required
 def cerrar_sesion(request):
     logout(request)  # Cierra la sesión del usuario
     return redirect('configuracion:inicio_sesion')  # Redirige a la página de inicio de sesión
-
-import os
-import shutil
-from django.core.files.storage import FileSystemStorage
 
 @login_required
 def editar_perfil(request):
@@ -198,22 +251,18 @@ def editar_perfil(request):
 
     return render(request, 'editarPerfil.html')
 
-
 @login_required
 def configuracion(request):
     return render(request, 'configuracion.html')
 
-
 def es_administrador(usuario):
     return usuario.is_authenticated and usuario.rol == 'administrador'
-
 
 @user_passes_test(es_administrador)
 def buscar_usuario(request):
     query = request.GET.get('query', '')
     usuarios = Usuario.objects.filter(nombre_completo__icontains=query).exclude(pk=request.user.pk)
     return render(request, 'configuracion.html', {'usuarios': usuarios})
-
 
 @user_passes_test(es_administrador)
 def cambiar_rol(request, usuario_id):
@@ -231,7 +280,7 @@ def eliminar_usuario(request, usuario_id):
         
         # Evitar que un administrador se elimine a sí mismo
         if usuario == request.user:
-            return redirect('configuracion:configuracion')  # Opcional: muestra un mensaje de error
+            return redirect('configuracion:configuracion')
         
         usuario.delete()  # Elimina al usuario de la base de datos
         return redirect('configuracion:configuracion')

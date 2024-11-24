@@ -1,0 +1,35 @@
+{% extends 'estiloGeneral.html' %}
+{% load static %}
+
+{% block title %}Editar Publicación{% endblock %}
+
+{% block estilosExtra %}
+<link rel="stylesheet" href="{% static 'css/formularioGeneral.css' %}">
+{% endblock %}
+
+{% block contenidoPrincipal %}
+<main class="formulario-main">
+    <div class="formulario-contenido">
+        <h2>Editar Publicación</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="grupo-formulario">
+                <label for="titulo">
+                    <input type="text" id="titulo" name="titulo" value="{{ publicacion.titulo }}" required>
+                    <span>Título de la Publicación</span>
+                </label>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label for="contenido">
+                    <textarea id="contenido" name="contenido" required>{{ publicacion.contenido }}</textarea>
+                    <span>Contenido de la Publicación</span>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn">Guardar Cambios</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

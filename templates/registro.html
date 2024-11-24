@@ -57,6 +57,13 @@
     </div>
 </main>
 
+{% if email_ya_registrado %}
+    <script type="text/javascript">
+        alert("El correo electrónico ya está registrado. Por favor, usa otro.");
+    </script>
+{% endif %}
+
+
 {% block scriptsExtra %}
 <script>
     function previewImage(event) {

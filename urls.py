@@ -20,4 +20,6 @@ urlpatterns = [
     path('usuario/<int:usuario_id>/', views.ver_usuario, name='ver_usuario'),
     path('expulsar_de_club/<int:club_id>/<int:usuario_id>/', views.expulsar_de_club, name='expulsar_de_club'),
     path('club/<int:club_id>/', views.ver_club, name='ver_club'),
+    path('editar_publicacion/<int:publicacion_id>/', views.editar_publicacion, name='editar_publicacion'),
+    path('editar_evento/<int:evento_id>/', views.editar_evento, name='editar_evento'),
 ]

@@ -27,12 +27,13 @@
                     <td>{{ publicacion.titulo }}</td>
                     <td>{{ publicacion.contenido }}</td>
                     <td>
+                        <a href="{% url 'configuracion:editar_publicacion' publicacion.id %}" class="btn">Editar</a>
                         <form method="POST" onsubmit="return confirm('¿Eliminar esta publicación?');">
                             {% csrf_token %}
                             <input type="hidden" name="publicacion_id" value="{{ publicacion.id }}">
                             <button type="submit" name="eliminar_publicacion" class="btn btn-peligro">Eliminar</button>
                         </form>
-                    </td>
+                    </td>                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -61,12 +62,13 @@
                     <td>{{ evento.descripcion }}</td>
                     <td>{{ evento.fecha }}</td>
                     <td>
+                        <a href="{% url 'configuracion:editar_evento' evento.id %}" class="btn">Editar</a>
                         <form method="POST" onsubmit="return confirm('¿Eliminar este evento?');">
                             {% csrf_token %}
                             <input type="hidden" name="evento_id" value="{{ evento.id }}">
                             <button type="submit" name="eliminar_evento" class="btn btn-peligro">Eliminar</button>
                         </form>
-                    </td>
+                    </td>                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -163,11 +165,17 @@
 }
 
 .btn {
+    background-color: var(--color-principal);
     padding: 8px 16px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--color-secundario);
+    color: var(--color-parrafoNormal);
 }
 
 .btn-peligro {
@@ -178,6 +186,16 @@
 .btn-peligro:hover {
     background-color: darkred;
 }
+
+.tabla td a, .tabla td form {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.tabla td form {
+    margin-right: 0;
+}
+
 
 </style>
 {% endblock %}
