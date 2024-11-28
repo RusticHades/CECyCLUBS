@@ -9,7 +9,6 @@ from .models import Usuario
 from clubes.models import Club, Publicacion, Evento
 from django.core.mail import send_mail
 
-
 @login_required
 def ver_club(request, club_id):
     club = get_object_or_404(Club, id=club_id)
@@ -37,7 +36,6 @@ def ver_club(request, club_id):
         'eventos': eventos,
     })
 
-
 @login_required
 def editar_publicacion(request, publicacion_id):
     publicacion = get_object_or_404(Publicacion, id=publicacion_id)
@@ -50,7 +48,6 @@ def editar_publicacion(request, publicacion_id):
         return redirect('configuracion:ver_club', club_id=publicacion.club.id)
 
     return render(request, 'editarPublicacion.html', {'publicacion': publicacion})
-
 
 @login_required
 def editar_evento(request, evento_id):
@@ -65,8 +62,6 @@ def editar_evento(request, evento_id):
         return redirect('configuracion:ver_club', club_id=evento.club.id)
 
     return render(request, 'editarEvento.html', {'evento': evento})
-
-
 
 @login_required
 def ver_usuario(request, usuario_id):
@@ -109,7 +104,6 @@ def expulsar_de_club(request, club_id, usuario_id):
             messages.error(request, f"No se pudo enviar el correo: {str(e)}")
 
     return redirect('configuracion:ver_usuario', usuario_id=usuario.id)
-
 
 @login_required
 def buscar_club(request):
@@ -168,9 +162,8 @@ def registro_usuario(request):
 
         # Verificar si el email ya está registrado
         if Usuario.objects.filter(email=email).exists():
-            # Si el email ya está registrado, renderizar la página con un alert en JS
             return render(request, 'registro.html', {
-                'email_ya_registrado': True  # Indicamos que el email ya está registrado
+                'email_ya_registrado': True
             })
 
         # Ruta base para guardar imágenes
@@ -182,7 +175,7 @@ def registro_usuario(request):
             # Guardar la imagen en la carpeta del usuario
             fs = FileSystemStorage(location=user_folder)
             filename = fs.save(foto_perfil.name, foto_perfil)
-            foto_url = os.path.join(user_folder, filename)  # Ruta relativa
+            foto_url = os.path.join(user_folder, filename)
 
         # Crear el usuario
         usuario = Usuario.objects.create_user(
@@ -191,7 +184,7 @@ def registro_usuario(request):
             password=password,
             nombre_completo=nombre_completo,
             rol=rol,
-            foto_perfil=foto_url,  # Guarda la ruta relativa
+            foto_perfil=foto_url,
         )
 
         # Iniciar sesión automáticamente
@@ -242,7 +235,7 @@ def editar_perfil(request):
             # Guardar nueva imagen
             fs = FileSystemStorage(location=user_folder)
             filename = fs.save(foto_perfil.name, foto_perfil)
-            foto_url = os.path.join(user_folder, filename)  # Ruta relativa
+            foto_url = os.path.join(user_folder, filename)
 
             request.user.foto_perfil = foto_url  # Actualizar ruta en el modelo
 
