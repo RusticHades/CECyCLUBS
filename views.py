@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Club, SolicitudClub, Publicacion, Evento, ImagenPublicacion, ImagenEvento
+from eventos.models import Asistencia
 from django.core.files.storage import FileSystemStorage
 import os
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 def detalles_club(request, nombre):
@@ -18,12 +20,12 @@ def detalles_club(request, nombre):
     # Verificar si el usuario es miembro del club
     es_miembro = request.user in club.miembros.all()
 
-    # Pasar los miembros con la URL de la imagen correctamente
+    # Pasar los miembros con la URL de la imagen
     for miembro in miembros:
         if miembro.foto_perfil:
             miembro.foto_perfil_url = '/' + miembro.foto_perfil.name
         else:
-            miembro.foto_perfil_url = None  # Si no hay foto, asigna None
+            miembro.foto_perfil_url = None  # Si no hay foto
 
     return render(request, 'detallesClub.html', {
         'club': club,
@@ -32,7 +34,6 @@ def detalles_club(request, nombre):
         'miembros': miembros,
         'es_miembro': es_miembro,
     })
-
 
 # Vista para agregar una noticia
 @login_required
@@ -110,9 +111,6 @@ def salir_club(request, nombre):
     return redirect('detalle_club', nombre=club.nombre)
 
 # Vista para mostrar el formulario de solicitud
-from django.contrib.auth.decorators import login_required
-from .models import SolicitudClub
-
 @login_required
 def solicitar_club(request):
     mensaje = None
@@ -123,7 +121,6 @@ def solicitar_club(request):
         
         # Verificar si ya existe una solicitud con el mismo nombre
         if SolicitudClub.objects.filter(nombre=nombre).exists():
-            # Si ya existe una solicitud, renderizamos la plantilla con un mensaje
             mensaje = 'Ya se ha solicitado un club con este nombre.'
         else:
             # Crear una nueva solicitud de club
@@ -131,7 +128,7 @@ def solicitar_club(request):
                 nombre=nombre,
                 categoria=categoria,
                 actividades=actividades,
-                correo=request.user.email  # Asignamos el correo del usuario logueado
+                correo=request.user.email
             )
             mensaje = 'La solicitud del club se ha enviado correctamente.'
     
@@ -140,10 +137,9 @@ def solicitar_club(request):
 # Vista para mostrar las solicitudes pendientes de clubs
 @login_required
 def solicitudes(request):
-    estado = request.GET.get('estado', 'pendiente')  # 'pendiente' es el valor por defecto
+    estado = request.GET.get('estado', 'pendiente')
     solicitudes = SolicitudClub.objects.filter(estatus=estado)
     return render(request, 'solicitudes.html', {'solicitudes': solicitudes, 'estado': estado})
-
 
 # Vista para rechazar una solicitud de club
 @login_required
@@ -157,7 +153,7 @@ def rechazar_solicitud(request, solicitud_id):
 @login_required
 def implementar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudClub, id=solicitud_id)
-    mensaje = None  # Inicializamos el mensaje como None
+    mensaje = None
     
     if request.method == 'POST':
         nombre = request.POST['nombre']
@@ -167,7 +163,7 @@ def implementar_solicitud(request, solicitud_id):
         
         # Verificar si ya existe un club con el mismo nombre
         if Club.objects.filter(nombre=nombre).exists():
-            # Si ya existe un club con ese nombre, renderizar con un mensaje
+            # Si ya existe un club con ese nombre, envia un mensaje
             mensaje = 'Ya existe un club con este nombre.'
         else:
             image_path = None
@@ -202,7 +198,7 @@ def clubes(request):
     # Si hay una búsqueda, filtrar los clubes por nombre
     busqueda = request.GET.get('busqueda', '')
     if busqueda:
-        clubes = clubes.filter(nombre__icontains=busqueda)  # Filtrar por nombre del club (case-insensitive)
+        clubes = clubes.filter(nombre__icontains=busqueda)  # Filtrar por nombre del club
 
     # Agrupar los clubes por categoría
     categorias = {}
@@ -214,10 +210,6 @@ def clubes(request):
     # Pasar el diccionario de categorías al template
     return render(request, 'clubes.html', {'clubes': categorias, 'busqueda': busqueda})
 
-
-from eventos.models import Asistencia
-from django.contrib import messages
-
 def asistir_evento(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
     
@@ -225,7 +217,6 @@ def asistir_evento(request, evento_id):
     ya_asistido = Asistencia.objects.filter(usuario_id=request.user, club_id=evento).exists()
     
     if ya_asistido:
-        # Opcional: Enviar un mensaje al usuario indicando que ya está registrado
         messages.info(request, "Ya estás inscrito en este evento.")
     else:
         # Crear un registro en la tabla de eventos asistidos
@@ -233,7 +224,6 @@ def asistir_evento(request, evento_id):
             usuario_id=request.user,
             club_id=evento
         )
-        # Opcional: Enviar un mensaje indicando que la inscripción fue exitosa
         messages.success(request, "Te has inscrito con éxito al evento.")
 
     # Redirigir al detalle del club

@@ -1,7 +1,7 @@
-# Modelo de Club
 from django.conf import settings
 from django.db import models
 
+# Modelo del Club
 class Club(models.Model):
     nombre = models.CharField(max_length=255)
     descripcion = models.TextField()

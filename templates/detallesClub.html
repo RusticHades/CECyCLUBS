@@ -42,7 +42,6 @@
     <div class="submenu">
         <button onclick="mostrarSeccion('noticias')" class="submenu-button active" id="noticias-tab">Noticias</button>
         <button onclick="mostrarSeccion('miembros')" class="submenu-button" id="miembros-tab">Miembros</button>
-        <button onclick="mostrarSeccion('chat')" class="submenu-button" id="chat-tab">Chat Grupal</button>
         <a href="{% url 'clubes' %}" class="submenu-button">Regresar</a>
     </div>
 
@@ -99,20 +98,6 @@
             {% endfor %}
         </div>
     </div>
-    
-
-    <div id="chat" class="contenido-seccion" style="display: none;">
-        <h2>Chat Grupal</h2>
-        <div class="chat">
-            <div class="chat-mensajes" id="chat-mensajes">
-                <!-- Aquí se agregarán los mensajes del chat -->
-            </div>
-            <div class="chat-input">
-                <input type="text" id="mensaje" placeholder="Escribe tu mensaje...">
-                <button onclick="enviarMensaje()">Enviar</button>
-            </div>
-        </div>
-    </div>
 </main>
 
 <script>
@@ -134,17 +119,5 @@
     document.addEventListener("DOMContentLoaded", function() {
         mostrarSeccion('noticias');
     });
-
-    function enviarMensaje() {
-        const mensajeInput = document.getElementById('mensaje');
-        const mensajeTexto = mensajeInput.value;
-        if (mensajeTexto) {
-            const mensajesDiv = document.getElementById('chat-mensajes');
-            const nuevoMensaje = document.createElement('div');
-            nuevoMensaje.textContent = mensajeTexto;
-            mensajesDiv.appendChild(nuevoMensaje);
-            mensajeInput.value = '';
-        }
-    }
 </script>
 {% endblock %}
